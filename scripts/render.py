@@ -9,10 +9,13 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "out"
-SCENES = ("geometric_proof", "phase_field", "system_map")
+CATALOG = json.loads((ROOT / "catalog.json").read_text())
+SCENES = tuple(item["id"] for item in CATALOG)
 
 
 def main() -> None:
+    if len(SCENES) < 12 or len(set(SCENES)) != len(SCENES):
+        raise SystemExit("catalog must contain at least 12 unique scenes")
     typst = shutil.which("typst")
     if not typst:
         raise SystemExit("typst is required")

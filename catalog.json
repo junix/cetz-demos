@@ -1,0 +1,14 @@
+[
+  {"id":"geometric_proof","use":"geometry education","question":"How is the nine-point circle constructed?","family":"geometric proof","complexity":"advanced","tags":["cetz","geometry","construction"]},
+  {"id":"phase_field","use":"dynamical systems","question":"How does a vector field converge on a limit cycle?","family":"phase portrait","complexity":"advanced","tags":["cetz","vector-field","math"]},
+  {"id":"system_map","use":"compiler architecture","question":"How does intent become visual output?","family":"system diagram","complexity":"advanced","tags":["cetz","architecture","pipeline"]},
+  {"id":"neural_architecture","use":"ML architecture","question":"How do residual blocks transform feature dimensions?","family":"network diagram","complexity":"advanced","tags":["cetz","neural-network","layers"]},
+  {"id":"orbital_mechanics","use":"astrodynamics","question":"How do transfer orbits connect two circular regimes?","family":"scientific schematic","complexity":"advanced","tags":["cetz","orbit","physics"]},
+  {"id":"circuit_schematic","use":"electronics","question":"How does a sensor front end condition a signal?","family":"circuit","complexity":"advanced","tags":["cetz","circuit","engineering"]},
+  {"id":"bezier_anatomy","use":"vector design","question":"How do control handles determine curve shape?","family":"geometry anatomy","complexity":"advanced","tags":["cetz","bezier","vector"]},
+  {"id":"timeline_roadmap","use":"program planning","question":"How do workstreams, gates, and dependencies align?","family":"roadmap","complexity":"advanced","tags":["cetz","timeline","planning"]},
+  {"id":"matrix_transforms","use":"linear algebra","question":"How do basis vectors change under chained transforms?","family":"math explainer","complexity":"advanced","tags":["cetz","matrix","education"]},
+  {"id":"topographic_map","use":"terrain analysis","question":"Where do contour density and drainage reveal terrain?","family":"contour map","complexity":"advanced","tags":["cetz","topography","map"]},
+  {"id":"molecule","use":"chemistry education","question":"How are functional groups positioned in a molecule?","family":"molecular diagram","complexity":"advanced","tags":["cetz","chemistry","graph"]},
+  {"id":"type_scale","use":"design systems","question":"How do typography tokens form a coherent hierarchy?","family":"specimen","complexity":"advanced","tags":["cetz","typography","design-system"]}
+]
