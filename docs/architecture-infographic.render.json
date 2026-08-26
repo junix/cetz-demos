@@ -1,132 +1,235 @@
 {
-  "source": "architecture-infographic.tex",
-  "project": "cetz-demos",
-  "project_path": "~/projects/plot/cetz-demos",
-  "output_dir": "docs/",
-  "language": "zh-CN",
+  "source": "/Users/junix/projects/plot/cetz-demos/docs/architecture-infographic.tex",
+  "workdir": "/Users/junix/projects/plot/cetz-demos",
+  "source_sha256": "ed81505707ac0d13ade5ec463656b129b84f955ea4a33d2f3168219639399f69",
   "engine": "xelatex",
   "engine_version": "XeTeX 3.141592653-2.6-0.999995 (TeX Live 2023)",
-  "dpi": 200,
-  "artifacts": {
-    "tex": {
-      "path": "architecture-infographic.tex",
-      "description": "Editable TikZ/LaTeX source",
-      "size_bytes": 13072
+  "dpi": 300,
+  "passes": 2,
+  "transparent_png": false,
+  "shell_escape": false,
+  "warnings": [],
+  "geometry": {
+    "pdf": "/var/folders/6q/xkny9rm10gqbzhz7qd0mjp5r0000gn/T/tikz-render-ocsbdouw/architecture-infographic.pdf",
+    "page_count": 1,
+    "expected_text": "cetz-demos",
+    "identity_match": true,
+    "thresholds": {
+      "min_text_pt": 6.5,
+      "min_width_occupancy": 0.45,
+      "min_height_occupancy": 0.3
     },
-    "pdf": {
-      "path": "architecture-infographic.pdf",
-      "description": "Canonical vector output (PDF)",
-      "size_bytes": 132097,
-      "page_count": 1,
-      "width_pt": 562.49,
-      "height_pt": 759.97
-    },
-    "png": {
-      "path": "architecture-infographic.png",
-      "description": "Raster proof at 200 DPI",
-      "size_bytes": 456925,
-      "width_px": 1563,
-      "height_px": 2112,
-      "width_to_height": 0.7401
-    },
-    "svg": {
-      "path": "architecture-infographic.svg",
-      "description": "SVG vector conversion (dvisvgm)",
-      "size_bytes": 949339
-    }
-  },
-  "visual_contract": {
-    "audience": "开发者、设计师、技术学习者",
-    "thesis": "CeTZ Demos 是基于 Typst + CeTZ 0.5.2 的文档原生矢量绘图参考库，提供 12 个跨学科的可复现绘图场景",
-    "reader_question": "这个项目是什么、由什么组成、如何工作、如何使用",
-    "narrative_order": ["标题与定位", "核心架构管线", "12 个场景画廊", "质量保障机制", "快速开始"],
-    "reading_direction": "top-to-bottom",
-    "medium": "static vector infographic",
-    "dimensions_cm": {
-      "width": 19.8,
-      "height": 26.7
-    },
-    "formats": ["tex", "pdf", "svg", "png"]
-  },
-  "narrative_sections": [
-    {
-      "id": "header",
-      "title": "项目定位",
-      "claim": "CeTZ Demos 是文档原生矢量绘图参考库",
-      "evidence": "基于 Typst 与 CeTZ 0.5.2，覆盖 12 个跨学科场景，全链路可复现"
-    },
-    {
-      "id": "pipeline",
-      "title": "核心架构管线",
-      "claim": "从 Typst 源码经 CeTZ 绘图库到透明 PNG 的四步编译流",
-      "stages": ["Typst 源码", "CeTZ 绘图库", "Typst 编译器", "透明 PNG 输出"],
-      "quality_gate": "三重像素校验（透明 ≥ 5%、可见 ≥ 2.5%、彩色 ≥ 1000）"
-    },
-    {
-      "id": "gallery",
-      "title": "12 个场景画廊",
-      "claim": "覆盖四大类视觉家族的 12 个参考场景",
-      "categories": {
-        "几何与数学": ["geometric_proof", "bezier_anatomy", "matrix_transforms"],
-        "科学与工程": ["phase_field", "orbital_mechanics", "circuit_schematic", "molecule"],
-        "系统与架构": ["system_map", "neural_architecture", "topographic_map"],
-        "设计与规划": ["timeline_roadmap", "type_scale"]
-      },
-      "metadata_source": "catalog.json"
-    },
-    {
-      "id": "quality",
-      "title": "质量保障",
-      "claim": "三重校验拒绝弱输出",
-      "checks": ["透明度校验", "可见像素校验", "色彩像素校验"]
-    },
-    {
-      "id": "quickstart",
-      "title": "快速开始",
-      "claim": "两行命令构建全部场景",
-      "commands": ["uv sync", "uv run python scripts/render.py"]
-    }
-  ],
-  "provenance": {
-    "data_sources": [
+    "pages": [
       {
-        "path": "README.md",
-        "type": "project description",
-        "facts_used": ["项目名称", "12 个场景", "CeTZ 0.5.2", "透明 PNG 输出", "渲染命令"]
-      },
-      {
-        "path": "catalog.json",
-        "type": "scene metadata",
-        "facts_used": ["12 个场景 id", "use/question/family/complexity/tags"]
-      },
-      {
-        "path": "scripts/render.py",
-        "type": "renderer implementation",
-        "facts_used": ["质量门阈值（5%/2.5%/1000）", "Pillow RGBA 校验", "typst compile --ppi 190"]
-      },
-      {
-        "path": "sources/*.typ",
-        "type": "source files",
-        "facts_used": ["CeTZ 0.5.2", "画布/图元/坐标系统"]
+        "page": 1,
+        "width_pt": 558.35,
+        "height_pt": 759.97,
+        "line_count": 104,
+        "text_extent": {
+          "left": 32.662,
+          "top": 25.437,
+          "right": 532.819,
+          "bottom": 744.482
+        },
+        "width_occupancy": 0.8958,
+        "height_occupancy": 0.9461,
+        "overlap_count": 0,
+        "overlap_examples": [],
+        "tiny_text_count": 0,
+        "tiny_text_examples": []
       }
     ],
-    "renderer": "create-infographic skill (render_tikz.py)",
-    "backend": "TikZ/PGF via XeLaTeX"
+    "issues": [],
+    "pass": true
   },
-  "verification": {
-    "compile_success": true,
-    "identity_match": true,
-    "expected_text": "CeTZ Demos",
-    "geometry_pass": true,
-    "composition_pass": false,
-    "composition_notes": [
-      "2 处 connector_through_block：场景卡片区的边界虚线被检测为块，属于视觉分界线而非缺陷",
-      "1 处 text_straddles_block_edge：管线标签与管道框间距接近，视觉上清晰可辨"
+  "composition": {
+    "pdf": "/var/folders/6q/xkny9rm10gqbzhz7qd0mjp5r0000gn/T/tikz-render-ocsbdouw/architecture-infographic.pdf",
+    "page": {
+      "width_pt": 558.35,
+      "height_pt": 759.97
+    },
+    "counts": {
+      "blocks": 25,
+      "containers": 0,
+      "leaf_blocks": 25,
+      "connectors": 7,
+      "marks": 4,
+      "text_lines": 104,
+      "masked_labels": 0,
+      "ignored_text_regions": 0,
+      "ignored_text_blocks": 0,
+      "ignored_text_connectors": 0,
+      "ignored_presentation_fields": 0,
+      "ignored_label_backdrops": 0
+    },
+    "metrics": {
+      "connectors_per_leaf_block": 0.28,
+      "labelled_connector_ratio": 0.857,
+      "leaf_area_cv": 0.667,
+      "lattice_ratio": 0.56,
+      "container_depth": 1,
+      "min_clearance_pt": null
+    },
+    "raster": {
+      "available": true,
+      "png": "/var/folders/6q/xkny9rm10gqbzhz7qd0mjp5r0000gn/T/tikz-render-ocsbdouw/architecture-infographic.png",
+      "background_rgb": [
+        248,
+        248,
+        248
+      ],
+      "ink_density": 0.057,
+      "cell_density_cv": 0.4719,
+      "quiet_cell_fraction": 0.1944,
+      "cells": 36
+    },
+    "thresholds": {
+      "clearance_pt": 2.0,
+      "label_radius_pt": 12.0,
+      "text_padding_pt": 1.5,
+      "min_block_area_pt2": 120.0,
+      "max_block_area_ratio": 0.55,
+      "min_connector_length_pt": 8.0,
+      "min_labeled_connector_ratio": 0.6,
+      "grid_min_blocks": 6,
+      "grid_area_cv": 0.12,
+      "grid_lattice_ratio": 0.75,
+      "max_container_depth": 2,
+      "max_ink_density": 0.38,
+      "min_quiet_cell_fraction": 0.08,
+      "min_cell_density_cv": 0.35
+    },
+    "violations": [],
+    "issues": [],
+    "notes": [],
+    "pass": true
+  },
+  "svg_lint": {
+    "tool": "svg-linter 0.1.0",
+    "input_sha256": "5296e3ffeee0d35a54d9f2d05c1b188c64b0b83ce8aa4a1558bf743f6833b365",
+    "catalog": {
+      "schema_version": "svg-linter.catalog/v1",
+      "catalog_version": "3",
+      "catalog_hash": "sha256:9079749fd5985a8f505c2a96c7d7dd90a990fb73f9f295c12620f63c338ac333"
+    },
+    "passes": {
+      "error_gate": {
+        "select": [
+          "svg/duplicate-id",
+          "svg/dangling-reference"
+        ],
+        "coverage": {
+          "evaluated": [
+            "svg/dangling-reference",
+            "svg/duplicate-id"
+          ],
+          "not_evaluated": {}
+        },
+        "counts": {},
+        "errors": 0,
+        "total": 0,
+        "viz": null
+      },
+      "hygiene_review": {
+        "select": [
+          "svg/excessive-path-complexity",
+          "svg/unused-definition",
+          "svg/external-resource",
+          "svg/raster-upscale",
+          "svg/open-filled-path"
+        ],
+        "coverage": {
+          "evaluated": [
+            "svg/excessive-path-complexity",
+            "svg/external-resource",
+            "svg/open-filled-path",
+            "svg/raster-upscale",
+            "svg/unused-definition"
+          ],
+          "not_evaluated": {}
+        },
+        "counts": {},
+        "errors": 0,
+        "total": 0,
+        "viz": null
+      },
+      "collision_review": {
+        "select": [
+          "svg/line-overlap",
+          "svg/line-crossing",
+          "svg/line-text-overlap",
+          "svg/text-text-overlap",
+          "svg/canvas-edge-clearance",
+          "svg/ambiguous-junction",
+          "svg/connector-through-shape",
+          "svg/edge-congestion",
+          "svg/filter-clipping-risk",
+          "svg/low-contrast-text"
+        ],
+        "coverage": {
+          "evaluated": [
+            "svg/ambiguous-junction",
+            "svg/canvas-edge-clearance",
+            "svg/connector-through-shape",
+            "svg/edge-congestion",
+            "svg/filter-clipping-risk",
+            "svg/line-crossing",
+            "svg/line-overlap",
+            "svg/line-text-overlap",
+            "svg/low-contrast-text",
+            "svg/text-text-overlap"
+          ],
+          "not_evaluated": {}
+        },
+        "counts": {},
+        "errors": 0,
+        "total": 0,
+        "viz": "/Users/junix/projects/plot/cetz-demos/docs/architecture-infographic.collision-review.png"
+      }
+    },
+    "path_font_quarantine": [
+      "svg/out-of-bounds",
+      "svg/path-self-crossing",
+      "svg/exact-duplicate-geometry",
+      "svg/outlined-text",
+      "svg/dangling-connector",
+      "svg/marker-overlap",
+      "svg/text-container-overflow",
+      "svg/text-edge-clearance",
+      "svg/shape-shape-overlap",
+      "svg/text-shape-overlap",
+      "svg/tiny-dogleg",
+      "svg/acute-connector-bend",
+      "svg/excessive-bends",
+      "svg/alignment-outlier",
+      "svg/spacing-outlier",
+      "svg/size-outlier",
+      "svg/container-padding-outlier",
+      "svg/font-style-outlier"
     ],
-    "cjk_font_used": "Source Han Serif SC",
-    "mono_font_used": "Sarasa Mono SC",
-    "visual_inspection": "pass"
+    "error_gate_clean": true,
+    "collision_findings": 0
   },
-  "build_command": "cd docs && python3 /Users/junix/.claude/skills/create-infographic/scripts/render_tikz.py architecture-infographic.tex --out-dir /tmp/out --engine xelatex --dpi 200 --svg --expect-text 'CeTZ Demos'",
-  "created": "2026-08-24"
+  "published_despite_strict_failure": false,
+  "artifacts": {
+    "pdf": {
+      "path": "/Users/junix/projects/plot/cetz-demos/docs/architecture-infographic.pdf",
+      "bytes": 131643
+    },
+    "png": {
+      "path": "/Users/junix/projects/plot/cetz-demos/docs/architecture-infographic.png",
+      "bytes": 746327,
+      "width_px": 2327,
+      "height_px": 3167,
+      "width_to_height": 0.7348
+    },
+    "svg": {
+      "path": "/Users/junix/projects/plot/cetz-demos/docs/architecture-infographic.svg",
+      "bytes": 958311
+    },
+    "svg_lint_viz": {
+      "path": "/Users/junix/projects/plot/cetz-demos/docs/architecture-infographic.collision-review.png",
+      "bytes": 117210
+    }
+  }
 }

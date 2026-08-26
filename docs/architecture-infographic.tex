@@ -1,12 +1,16 @@
 \documentclass[border=12pt,varwidth=19cm]{standalone}
 % CeTZ Demos 架构信息图
 % 叙事路径：项目定位 → 核心架构管线 → 12 个场景分类 → 质量保障 → 快速开始
+%
+% Render: python3 ~/.agents/skills/create-infographic/scripts/render_tikz.py docs/architecture-infographic.tex --workdir . --out-dir docs --engine xelatex --dpi 300 --svg --strict-warnings --strict-geometry --strict-composition --strict-svg --min-labelled-connectors 0.6 --expect-text "cetz-demos"
 \usepackage[UTF8,fontset=none]{ctex}
 \IfFontExistsTF{Source Han Serif SC}{
-  \setmainfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
-  \setsansfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
-  \setCJKmainfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
-  \setCJKsansfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
+  % LetterSpace=5.0：pdftocairo 导出 SVG 时相邻字形 bbox 亚像素相切，
+  % 会被 svg/text-text-overlap 误报；微字距让导出 bbox 脱开（见 svg-linter）
+  \setmainfont[BoldFont={Source Han Serif SC Bold},BoldFeatures={LetterSpace=5.0},LetterSpace=5.0]{Source Han Serif SC}
+  \setsansfont[BoldFont={Source Han Serif SC Bold},BoldFeatures={LetterSpace=5.0},LetterSpace=5.0]{Source Han Serif SC}
+  \setCJKmainfont[BoldFont={Source Han Serif SC Bold},BoldFeatures={LetterSpace=5.0},LetterSpace=5.0]{Source Han Serif SC}
+  \setCJKsansfont[BoldFont={Source Han Serif SC Bold},BoldFeatures={LetterSpace=5.0},LetterSpace=5.0]{Source Han Serif SC}
 }{
   \PackageWarningNoLine{tikz-infographic}{Source Han Serif SC not found; using Fandol}
   \setCJKmainfont[BoldFont={FandolSong-Bold}]{FandolSong-Regular}
@@ -143,9 +147,9 @@
   \end{pgfonlayer}
 
   % 管线标签
-  \node[note,anchor=south] at ($(src.east)!0.5!(cetz.west)$) {导入绘图原语};
-  \node[note,anchor=south] at ($(cetz.east)!0.5!(typst.west)$) {布局与排版};
-  \node[note,anchor=south] at ($(typst.east)!0.5!(out.west)$) {栅格化输出};
+  \node[note,anchor=south] at ($(src.east)!0.5!(cetz.west)$) {导入原语};
+  \node[note,anchor=south] at ($(cetz.east)!0.5!(typst.west)$) {布局排版};
+  \node[note,anchor=south] at ($(typst.east)!0.5!(out.west)$) {栅格输出};
 
   % 质量门（放在输出下方，边界线之上，不穿越分界线）
   \node[badge,anchor=north] (q1) at (16.3,19.5) {Q};
@@ -227,24 +231,24 @@
   % ═══════════════════════════════════════════════════════════════
   % SECTION 4 — 质量保障与验证
   % ═══════════════════════════════════════════════════════════════
-  \draw[boundary] (0,5.0) -- (17.7,5.0);
-  \node[kicker,anchor=west] at (0,4.4) {质量保障};
-  \node[h2,anchor=west] at (0,3.85) {三重校验 · 拒绝弱输出};
+  \draw[boundary] (0,4.55) -- (17.7,4.55);
+  \node[kicker,anchor=west] at (0,4.1) {质量保障};
+  \node[h2,anchor=west] at (0,3.6) {三重校验 · 拒绝弱输出};
 
   % 三个校验维度
-  \node[badge] (b1) at (1.5,2.6) {1};
-  \node[h3,anchor=west] at (2.2,2.9) {透明度校验};
-  \node[body,anchor=north west,text width=4.6cm] at (2.2,2.6)
+  \node[badge] (b1) at (1.5,2.45) {1};
+  \node[h3,anchor=west] at (2.2,2.75) {透明度校验};
+  \node[body,anchor=north west,text width=4.6cm] at (2.2,2.45)
     {透明像素占比 ≥ 5\%，确保背景未被意外填充，输出可直接嵌入文档。};
 
-  \node[badge] (b2) at (7.2,2.6) {2};
-  \node[h3,anchor=west] at (7.9,2.9) {可见像素校验};
-  \node[body,anchor=north west,text width=4.6cm] at (7.9,2.6)
+  \node[badge] (b2) at (7.2,2.45) {2};
+  \node[h3,anchor=west] at (7.9,2.75) {可见像素校验};
+  \node[body,anchor=north west,text width=4.6cm] at (7.9,2.45)
     {非透明可见像素 ≥ 2.5\%，排除全空画布或几乎看不见的渲染失败。};
 
-  \node[badge] (b3) at (12.9,2.6) {3};
-  \node[h3,anchor=west] at (13.6,2.9) {色彩像素校验};
-  \node[body,anchor=north west,text width=4.6cm] at (13.6,2.6)
+  \node[badge] (b3) at (12.9,2.45) {3};
+  \node[h3,anchor=west] at (13.6,2.75) {色彩像素校验};
+  \node[body,anchor=north west,text width=4.05cm] at (13.6,2.45)
     {彩色像素数 ≥ 1000，确保图像有足够的色彩信息而非灰度草图。};
 
   % ═══════════════════════════════════════════════════════════════
@@ -256,5 +260,5 @@
   \node[mono,anchor=east] at (17.7,0.3)
     {\$ uv sync \quad|\quad \$ uv run python scripts/render.py};
 
-\end{tikzpicture}
+\end{tikzpicture}%
 \end{document}
