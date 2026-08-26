@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cetz-demos 架构文档</title>
+<style>
+  /* ===== 基础样式 ===== */
+  :root {
+    --bg: #fbfcfd;
+    --surface: #ffffff;
+    --ink: #1a2332;
+    --ink-soft: #4a5568;
+    --ink-mute: #718096;
+    --line: #e2e8f0;
+    --line-soft: #edf2f7;
+    --accent: #4c6ef5;
+    --accent-soft: #dbe4ff;
+    --accent-deep: #3b5bdb;
+    --teal: #20c997;
+    --amber: #fab005;
+    --rose: #fa5252;
+    --violet: #7950f2;
+    --radius: 12px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04), 0 1px 3px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ===== 顶部导航 ===== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(251,252,253,.85);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    letter-spacing: .2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-brand .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--violet));
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    font-size: 13.5px;
+  }
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--accent-deep); }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 72px 0 48px;
+    text-align: center;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .hero .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: var(--accent-soft);
+    color: var(--accent-deep);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -.5px;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, var(--ink) 0%, var(--accent-deep) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .hero .meta {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .hero .meta .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .hero .meta .num {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent-deep);
+  }
+  .hero .meta .label {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+  }
+
+  /* ===== 章节 ===== */
+  section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  section:last-of-type { border-bottom: none; }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-deep);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  section h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -.3px;
+    margin-bottom: 14px;
+  }
+  section > .lead {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-bottom: 32px;
+    max-width: 720px;
+  }
+
+  /* ===== 功能列表 ===== */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+  }
+  .feature:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-soft);
+  }
+  .feature .icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .feature:nth-child(1) .icon { background: #dbe4ff; color: var(--accent-deep); }
+  .feature:nth-child(2) .icon { background: #d3f9d8; color: #2b8a3e; }
+  .feature:nth-child(3) .icon { background: #fff3bf; color: #b37400; }
+  .feature:nth-child(4) .icon { background: #ffe3e3; color: var(--rose); }
+  .feature:nth-child(5) .icon { background: #e5dbff; color: var(--violet); }
+  .feature:nth-child(6) .icon { background: #c5f6fa; color: #0c8599; }
+  .feature h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .feature p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* ===== 架构图容器 ===== */
+  .diagram-wrap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .diagram-wrap h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .diagram-wrap h3::before {
+    content: "";
+    width: 4px;
+    height: 18px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--violet));
+  }
+  .diagram {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* SVG 节点通用样式 */
+  .node-box {
+    fill: #f8f9fa;
+    stroke: #ced4da;
+    stroke-width: 1.5;
+    rx: 8;
+    ry: 8;
+    transition: all .4s cubic-bezier(.4,0,.2,1);
+  }
+  .node-box.accent { fill: #e7f5ff; stroke: #74c0fc; }
+  .node-box.teal { fill: #e6fcf5; stroke: #63e6be; }
+  .node-box.amber { fill: #fff9db; stroke: #ffd43b; }
+  .node-box.rose { fill: #fff5f5; stroke: #ffa8a8; }
+  .node-box.violet { fill: #f3f0ff; stroke: #b197fc; }
+  .node-label {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--ink);
+    text-anchor: middle;
+  }
+  .node-sub {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10.5px;
+    fill: var(--ink-mute);
+    text-anchor: middle;
+  }
+  .arrow {
+    fill: none;
+    stroke: #adb5bd;
+    stroke-width: 1.5;
+    stroke-dasharray: 5,4;
+    transition: stroke-dashoffset 1s ease, stroke .3s;
+  }
+  .arrow.solid { stroke-dasharray: none; }
+  .arrow-head {
+    fill: #adb5bd;
+    transition: fill .3s;
+  }
+  .arrow.animated, .arrow-head.animated {
+    stroke: var(--accent);
+    fill: var(--accent);
+  }
+  .arrow-head.animated { fill: var(--accent); }
+
+  /* ===== 说明文字 ===== */
+  .explain {
+    background: #f8f9fa;
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+  .explain p + p { margin-top: 10px; }
+  .explain strong { color: var(--ink); font-weight: 600; }
+
+  /* ===== 走查步骤 ===== */
+  .walkthrough {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 18px;
+    align-items: start;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .step.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .step-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--violet));
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(76,110,245,.25);
+    flex-shrink: 0;
+  }
+  .step-body {
+    padding-top: 6px;
+  }
+  .step-body h4 {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .step-body p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  /* ===== 技术栈 ===== */
+  .tech-stack {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .tech-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .tech-item:nth-child(1) .tech-icon { background: #2563eb; }
+  .tech-item:nth-child(2) .tech-icon { background: #13c2c2; }
+  .tech-item:nth-child(3) .tech-icon { background: #722ed1; }
+  .tech-item:nth-child(4) .tech-icon { background: #fa8c16; }
+  .tech-item:nth-child(5) .tech-icon { background: #eb2f96; }
+  .tech-item:nth-child(6) .tech-icon { background: #52c41a; }
+  .tech-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .tech-role {
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+
+  /* ===== 目录结构 ===== */
+  .dir-tree {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    overflow-x: auto;
+  }
+  .dir-tree .dir { color: #74c0fc; font-weight: 500; }
+  .dir-tree .file { color: #e2e8f0; }
+  .dir-tree .comment { color: #64748b; font-style: italic; }
+  .dir-tree .indent { display: inline-block; width: 20px; }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: 32px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-mute);
+    border-top: 1px solid var(--line-soft);
+  }
+
+  /* ===== 打印样式 ===== */
+  @media print {
+    header { position: static; }
+    .nav-links { display: none; }
+    section { padding: 24px 0; break-inside: avoid; page-break-inside: avoid; }
+    .diagram-wrap { box-shadow: none; break-inside: avoid; }
+    .feature { break-inside: avoid; box-shadow: none; }
+    .hero { padding: 24px 0; }
+    .hero h1 { -webkit-text-fill-color: var(--ink); }
+    .step { opacity: 1 !important; transform: none !important; }
+    .arrow { stroke: #999 !important; stroke-dasharray: 4,3 !important; }
+    .arrow-head { fill: #999 !important; }
+    a { text-decoration: none; color: inherit; }
+  }
+
+  /* ===== 减弱动画 ===== */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+    }
+    .step { opacity: 1; transform: none; }
+  }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 28px; }
+    .hero { padding: 48px 0 32px; }
+    section { padding: 40px 0; }
+    section h2 { font-size: 22px; }
+    .diagram-wrap { padding: 20px 14px; }
+    .nav-links { display: none; }
+    .features { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="nav-brand">
+      <span class="dot"></span>
+      cetz-demos 架构
+    </div>
+    <nav class="nav-links">
+      <a href="#overview">总览</a>
+      <a href="#features">特性</a>
+      <a href="#context">系统上下文</a>
+      <a href="#pipeline">渲染流水线</a>
+      <a href="#validation">校验层</a>
+      <a href="#walkthrough">主走查</a>
+      <a href="#tech">技术栈</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ========== HERO ========== -->
+<div class="hero">
+  <div class="container">
+    <div class="badge">CeTZ 0.5.2 · Typst · 矢量绘图</div>
+    <h1>文档原生矢量图集</h1>
+    <p>
+      基于 Typst 与 CeTZ 构建的十二组参考级矢量演示场景，
+      覆盖几何、物理、电路、神经网络、地形图等学科，
+      全量可复现、全量透明背景、全量程序化生成。
+    </p>
+    <div class="meta">
+      <div class="item"><span class="num" id="count-scenes">12</span><span class="label">演示场景</span></div>
+      <div class="item"><span class="num">190</span><span class="label">PPI 渲染精度</span></div>
+      <div class="item"><span class="num">3</span><span class="label">输出校验维度</span></div>
+      <div class="item"><span class="num">0</span><span class="label">外部资源依赖</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 总览 ========== -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label">OVERVIEW</div>
+    <h2>项目定位</h2>
+    <p class="lead">
+      <strong>cetz-demos</strong> 是一个演示与教学性质的矢量图集项目。它以
+      <strong>Typst</strong>（排版与编译引擎）和 <strong>CeTZ</strong>（基于 TikZ 思想的
+      Typst 绘图库）为核心，用纯代码方式描述十二种不同领域的科学与工程图表，
+      并通过 Python 渲染脚本完成批量编译与质量校验。
+    </p>
+    <p class="lead">
+      「文档原生」是该项目的核心理念：每张图都是一段 Typst 代码，
+      可直接嵌入 Typst 文档、可被版本控制、可按任意分辨率重渲。
+      输出的透明 PNG 则便于在幻灯片、网页与设计稿中直接复用。
+    </p>
+  </div>
+</section>
+
+<!-- ========== 特性 ========== -->
+<section id="features">
+  <div class="container">
+    <div class="section-label">FEATURES</div>
+    <h2>核心特性</h2>
+    <p class="lead">六个维度定义了这个图集项目的工程质量与可复用性。</p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="icon">12</div>
+        <h3>全场景覆盖</h3>
+        <p>从几何证明、相场、轨道力学到电路、神经网络、分子结构，十二组场景横跨六个学科领域。</p>
+      </div>
+      <div class="feature">
+        <div class="icon">⟳</div>
+        <h3>可复现构建</h3>
+        <p>每张图由纯 Typst 代码描述，配合 uv 锁定依赖与 catalog 索引，任何环境都能从零生成一致结果。</p>
+      </div>
+      <div class="feature">
+        <div class="icon">▣</div>
+        <h3>透明背景输出</h3>
+        <p>所有 PNG 以透明底渲染（190 PPI），可直接叠加在幻灯片、网页或任意设计背景之上。</p>
+      </div>
+      <div class="feature">
+        <div class="icon">✓</div>
+        <h3>三维质量校验</h3>
+        <p>渲染脚本自动检测透明像素占比、可见像素占比与彩色像素数量，拒绝异常或空图输出。</p>
+      </div>
+      <div class="feature">
+        <div class="icon">≡</div>
+        <h3>目录化元数据</h3>
+        <p>catalog.json 为每个场景标注用途、核心问题、视觉家族、复杂度与标签，支持程序化检索。</p>
+      </div>
+      <div class="feature">
+        <div class="icon">◎</div>
+        <h3>矢量原生绘制</h3>
+        <p>基于 CeTZ canvas 的命令式绘图 API，所有几何对象可精确控制，缩放不失真。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 系统上下文图 ========== -->
+<section id="context">
+  <div class="container">
+    <div class="section-label">SYSTEM CONTEXT</div>
+    <h2>系统上下文</h2>
+    <p class="lead">
+      项目处于「开发者 → 图集项目 → 外部编译工具」的简单三层结构中。
+      核心外部依赖只有两个：<strong>Typst 编译器</strong>（负责将 .typ 源码渲染为 PNG）
+      与 <strong>CeTZ 包</strong>（Typst 生态中的绘图库，通过 preview 渠道引入）。
+    </p>
+
+    <div class="diagram-wrap">
+      <h3>系统上下文图</h3>
+      <svg class="diagram" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="系统上下文图">
+        <defs>
+          <marker id="arrow-default" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow-head" d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+          <marker id="arrow-accent" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow-head animated" d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+        </defs>
+
+        <!-- 开发者 -->
+        <g class="ctx-dev">
+          <rect class="node-box amber" x="40" y="130" width="130" height="80" rx="10" ry="10"/>
+          <text class="node-label" x="105" y="165">开发者</text>
+          <text class="node-sub" x="105" y="185">uv run / 编写场景</text>
+        </g>
+
+        <!-- 中心：cetz-demos 项目 -->
+        <g class="ctx-center">
+          <rect class="node-box accent" x="290" y="70" width="220" height="200" rx="12" ry="12"/>
+          <text class="node-label" style="font-size:16px" x="400" y="120">cetz-demos</text>
+          <text class="node-sub" x="400" y="140">矢量图集项目</text>
+          <line x1="310" y1="155" x2="490" y2="155" stroke="#74c0fc" stroke-width="1" opacity=".5"/>
+          <text class="node-sub" x="400" y="178">sources/ · catalog.json</text>
+          <text class="node-sub" x="400" y="198">scripts/render.py</text>
+          <text class="node-sub" x="400" y="218">out/*.png</text>
+        </g>
+
+        <!-- Typst 编译器 -->
+        <g class="ctx-typst">
+          <rect class="node-box violet" x="610" y="40" width="150" height="70" rx="10" ry="10"/>
+          <text class="node-label" x="685" y="70">Typst 编译器</text>
+          <text class="node-sub" x="685" y="88">外部可执行程序</text>
+        </g>
+
+        <!-- CeTZ 包 -->
+        <g class="ctx-cetz">
+          <rect class="node-box teal" x="610" y="150" width="150" height="70" rx="10" ry="10"/>
+          <text class="node-label" x="685" y="180">CeTZ 0.5.2</text>
+          <text class="node-sub" x="685" y="198">Typst preview 包</text>
+        </g>
+
+        <!-- 输出产物使用者 -->
+        <g class="ctx-consumer">
+          <rect class="node-box rose" x="610" y="260" width="150" height="70" rx="10" ry="10"/>
+          <text class="node-label" x="685" y="290">下游消费者</text>
+          <text class="node-sub" x="685" y="308">幻灯片 / 网页 / 文档</text>
+        </g>
+
+        <!-- 箭头 -->
+        <path class="arrow solid" d="M 170 170 L 290 170" marker-end="url(#arrow-default)"/>
+        <path class="arrow solid" d="M 510 100 L 610 75" marker-end="url(#arrow-default)"/>
+        <path class="arrow solid" d="M 510 170 L 610 185" marker-end="url(#arrow-default)"/>
+        <path class="arrow solid" d="M 510 240 L 610 295" marker-end="url(#arrow-default)"/>
+
+        <!-- 标签 -->
+        <text class="node-sub" x="230" y="162" style="fill:#868e90">触发渲染</text>
+        <text class="node-sub" x="555" y="82" style="fill:#868e90">调用编译</text>
+        <text class="node-sub" x="555" y="175" style="fill:#868e90">导入绘图库</text>
+        <text class="node-sub" x="555" y="265" style="fill:#868e90">输出 PNG</text>
+      </svg>
+    </div>
+
+    <div class="explain">
+      <p>
+        <strong>上下文解读：</strong>本项目自身不包含任何运行时服务或后端进程，
+        它是一个<strong>源码+脚本+产物</strong>三位一体的静态图集项目。开发者通过
+        <code>uv run python scripts/render.py</code> 触发构建，
+        脚本调用系统中安装的 Typst 编译器，后者在编译过程中自动从
+        Typst 包仓库拉取 CeTZ 0.5.2（首次运行时）。
+      </p>
+      <p>
+        编译完成后，脚本使用 Pillow 对每张输出 PNG 进行三维质量校验，
+        通过则保留在 <code>out/</code> 目录中供下游使用。
+        下游消费者（幻灯片、网页、论文）只依赖最终的 PNG 文件，与构建过程完全解耦。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 渲染流水线 ========== -->
+<section id="pipeline">
+  <div class="container">
+    <div class="section-label">RENDER PIPELINE</div>
+    <h2>渲染流水线</h2>
+    <p class="lead">
+      一次完整的渲染过程分为五个阶段，从目录校验开始，到最终的像素级质检结束。
+      每个阶段都有明确的输入、输出与失败条件，确保构建的可预测性。
+    </p>
+
+    <div class="diagram-wrap">
+      <h3>渲染流水线（动画演示）</h3>
+      <svg class="diagram" viewBox="0 0 820 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="渲染流水线">
+        <defs>
+          <marker id="pipe-arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow-head" d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+          <marker id="pipe-arrow-on" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow-head animated" d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+        </defs>
+
+        <!-- 阶段 1：目录校验 -->
+        <g id="pipe-stage-1">
+          <rect class="node-box" x="30" y="140" width="130" height="100"/>
+          <text class="node-label" x="95" y="178">① 目录校验</text>
+          <text class="node-sub" x="95" y="198">catalog.json</text>
+          <text class="node-sub" x="95" y="214">≥12 唯一场景</text>
+        </g>
+
+        <!-- 阶段 2：环境检查 -->
+        <g id="pipe-stage-2">
+          <rect class="node-box" x="190" y="140" width="130" height="100"/>
+          <text class="node-label" x="255" y="178">② 环境检查</text>
+          <text class="node-sub" x="255" y="198">typst 可执行</text>
+          <text class="node-sub" x="255" y="214">out/ 目录就绪</text>
+        </g>
+
+        <!-- 阶段 3：Typst 编译 -->
+        <g id="pipe-stage-3">
+          <rect class="node-box" x="350" y="130" width="150" height="120"/>
+          <text class="node-label" x="425" y="170">③ Typst 编译</text>
+          <text class="node-sub" x="425" y="190">sources/*.typ</text>
+          <text class="node-sub" x="425" y="208">--ppi 190</text>
+          <text class="node-sub" x="425" y="226">PNG + 透明底</text>
+        </g>
+
+        <!-- 阶段 4：像素校验 -->
+        <g id="pipe-stage-4">
+          <rect class="node-box" x="530" y="130" width="150" height="120"/>
+          <text class="node-label" x="605" y="170">④ 像素校验</text>
+          <text class="node-sub" x="605" y="190">透明率 ≥ 5%</text>
+          <text class="node-sub" x="605" y="208">可见率 ≥ 2.5%</text>
+          <text class="node-sub" x="605" y="226">彩色像素 ≥ 1000</text>
+        </g>
+
+        <!-- 阶段 5：产物输出 -->
+        <g id="pipe-stage-5">
+          <rect class="node-box" x="710" y="140" width="90" height="100"/>
+          <text class="node-label" x="755" y="178">⑤ 输出</text>
+          <text class="node-sub" x="755" y="198">out/*.png</text>
+          <text class="node-sub" x="755" y="214">JSON 报告</text>
+        </g>
+
+        <!-- 流水线连接线 -->
+        <path id="pipe-1-2" class="arrow solid" d="M 160 190 L 190 190" marker-end="url(#pipe-arrow)"/>
+        <path id="pipe-2-3" class="arrow solid" d="M 320 190 L 350 190" marker-end="url(#pipe-arrow)"/>
+        <path id="pipe-3-4" class="arrow solid" d="M 500 190 L 530 190" marker-end="url(#pipe-arrow)"/>
+        <path id="pipe-4-5" class="arrow solid" d="M 680 190 L 710 190" marker-end="url(#pipe-arrow)"/>
+
+        <!-- 上方输入 -->
+        <g opacity="0.7">
+          <rect class="node-box teal" x="350" y="30" width="150" height="60" rx="8"/>
+          <text class="node-label" x="425" y="58" style="font-size:12px">.typ 场景源文件</text>
+          <text class="node-sub" x="425" y="76">sources/ 目录</text>
+          <path class="arrow solid" d="M 425 90 L 425 130" marker-end="url(#pipe-arrow)"/>
+        </g>
+
+        <!-- 下方：逐场景循环 -->
+        <g opacity="0.6">
+          <path class="arrow" d="M 605 250 Q 605 310 425 310 Q 300 310 300 250"
+                stroke-dasharray="6,4" marker-end="url(#pipe-arrow)"/>
+          <text class="node-sub" x="460" y="335" style="fill:#868e96">逐场景循环 (12 次)</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="explain">
+      <p>
+        <strong>流水线解读：</strong>渲染脚本启动后，首先读取 <code>catalog.json</code>
+        并校验场景数量与唯一性——这是防止目录破损或重复的第一道防线。
+        接着检查 Typst 编译器是否在 PATH 中可用，不存在则直接终止。
+      </p>
+      <p>
+        主循环以目录中定义的场景顺序逐次编译：每个 <code>.typ</code> 文件通过
+        <code>typst compile --ppi 190</code> 命令被独立渲染为同名 PNG。
+        编译完成后，脚本用 Pillow 打开图像并转换为 RGBA 模式，
+        从<strong>透明度、可见度、色彩丰富度</strong>三个维度统计像素分布，
+        任一维度不达标即中断并报错。
+      </p>
+      <p>
+        全部通过后，脚本向标准输出打印一行 JSON 格式的统计报告，
+        包含场景名、尺寸、透明率、可见率与彩色像素数，便于 CI 系统解析。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 校验层 ========== -->
+<section id="validation">
+  <div class="container">
+    <div class="section-label">QUALITY GATE</div>
+    <h2>质量校验层</h2>
+    <p class="lead">
+      与「只要编译成功就认为通过」的常规做法不同，本项目引入了
+      <strong>像素级三维质检</strong>，确保输出图像不是空白、不是纯黑、
+      也不是因渲染异常产生的单色图。
+    </p>
+
+    <div class="diagram-wrap">
+      <h3>三维校验模型</h3>
+      <svg class="diagram" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三维校验模型">
+        <defs>
+          <marker id="val-arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow-head" d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+        </defs>
+
+        <!-- 中心：输出 PNG -->
+        <g id="val-center">
+          <rect class="node-box accent" x="320" y="150" width="160" height="70" rx="10"/>
+          <text class="node-label" x="400" y="180">输出 PNG</text>
+          <text class="node-sub" x="400" y="200">RGBA 图像</text>
+        </g>
+
+        <!-- 三个校验维度 -->
+        <g id="val-t">
+          <rect class="node-box rose" x="80" y="40" width="180" height="80" rx="10"/>
+          <text class="node-label" x="170" y="72">透明度校验</text>
+          <text class="node-sub" x="170" y="92">alpha[0] ≥ 5% 像素</text>
+          <text class="node-sub" x="170" y="108">确保透明背景生效</text>
+          <path class="arrow solid" d="M 260 80 L 320 160" marker-end="url(#val-arrow)"/>
+        </g>
+
+        <g id="val-v">
+          <rect class="node-box teal" x="540" y="40" width="180" height="80" rx="10"/>
+          <text class="node-label" x="630" y="72">可见度校验</text>
+          <text class="node-sub" x="630" y="92">alpha&gt;16 像素 ≥ 2.5%</text>
+          <text class="node-sub" x="630" y="108">排除全透明空图</text>
+          <path class="arrow solid" d="M 540 80 L 480 160" marker-end="url(#val-arrow)"/>
+        </g>
+
+        <g id="val-c">
+          <rect class="node-box amber" x="300" y="270" width="200" height="70" rx="10"/>
+          <text class="node-label" x="400" y="300">色彩丰富度校验</text>
+          <text class="node-sub" x="400" y="320">彩色像素 ≥ 1000 (max-min &gt; 24)</text>
+          <path class="arrow solid" d="M 400 270 L 400 220" marker-end="url(#val-arrow)"/>
+        </g>
+
+        <!-- 结果 -->
+        <g id="val-result">
+          <rect class="node-box violet" x="680" y="240" width="100" height="50" rx="8"/>
+          <text class="node-label" x="730" y="270">通过 / 失败</text>
+          <path class="arrow solid" d="M 500 220 Q 600 230 680 260" marker-end="url(#val-arrow)"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="explain">
+      <p>
+        <strong>校验维度详解：</strong>第一维是<strong>透明度</strong>——统计 Alpha 通道值为 0 的像素占比，
+        低于 5% 说明背景填充可能失效或尺寸计算异常。第二维是<strong>可见度</strong>——
+        Alpha 值大于 16 的像素占比低于 2.5%，意味着图像几乎全透明，可能是绘制内容完全超出画布。
+      </p>
+      <p>
+        第三维是<strong>色彩丰富度</strong>——统计 R、G、B 三通道最大最小值之差大于 24
+        （即具有可感知色差）的像素总数，低于 1000 说明图像可能是单色调的线框或灰度图，
+        与本项目「彩色科学图示」的定位不符。三维同时通过，才算一次合格的渲染。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 主走查 ========== -->
+<section id="walkthrough">
+  <div class="container">
+    <div class="section-label">MAIN WALKTHROUGH</div>
+    <h2>主走查：九点圆渲染</h2>
+    <p class="lead">
+      以 <strong>geometric_proof</strong>（九点圆几何证明图）为例，
+      逐步追踪一次完整的「从源码到出图」端到端流程。
+      九点圆是 CeTZ 几何绘图能力的典型示例，涉及构造点、连线、圆填充与文字标注。
+    </p>
+
+    <div class="walkthrough">
+      <div class="step" data-step="1">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>读取目录与场景解析</h4>
+          <p>
+            脚本启动后加载 <code>catalog.json</code>，从中提取 12 个场景 ID，
+            包括 <code>geometric_proof</code>。校验数量与唯一性后，
+            在 <code>sources/</code> 目录下定位到同名 <code>.typ</code> 源文件。
+          </p>
+        </div>
+      </div>
+
+      <div class="step" data-step="2">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>调用 Typst 编译</h4>
+          <p>
+            脚本通过子进程执行 <code>typst compile --ppi 190 sources/geometric_proof.typ
+            out/geometric_proof-transparent.png</code>。
+            Typst 解析源码：导入 CeTZ 0.5.2、设置页面自适应尺寸与透明填充、
+            在 canvas 中执行 CeTZ 绘图命令（三个顶点、三条中点连线、九点位圆、标注文字）。
+          </p>
+        </div>
+      </div>
+
+      <div class="step" data-step="3">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>生成透明 PNG 输出</h4>
+          <p>
+            Typst 将矢量绘图栅格化为 190 PPI 的 RGBA 位图。由于页面 <code>fill: none</code>，
+            背景区域 Alpha 为 0；三角形、圆、文字等图形元素则以不透明像素写入。
+            输出写入 <code>out/</code> 目录。
+          </p>
+        </div>
+      </div>
+
+      <div class="step" data-step="4">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>三维像素校验</h4>
+          <p>
+            Pillow 读取 PNG 并转为 RGBA。先做 Alpha 直方图判断透明/可见比例，
+            再枚举所有像素颜色统计彩色像素数。九点圆包含粉色/青色/黄色的顶点与高线、
+            蓝色的圆填充，彩色像素数远高于 1000 阈值，校验通过。
+          </p>
+        </div>
+      </div>
+
+      <div class="step" data-step="5">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>输出统计并进入下一循环</h4>
+          <p>
+            脚本向 stdout 打印一行 JSON，记录该场景的尺寸与各项比例。
+            随后以同样的流程处理剩余 11 个场景，全部通过后进程以 0 状态码退出。
+            若任一场景失败，进程立即以非零状态码终止，错误信息中附带场景名与各维度数值。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 技术栈 ========== -->
+<section id="tech">
+  <div class="container">
+    <div class="section-label">TECH STACK</div>
+    <h2>技术栈一览</h2>
+    <p class="lead">项目虽小，但每一层技术选型都有明确的职责边界。</p>
+
+    <div class="tech-stack">
+      <div class="tech-item">
+        <div class="tech-icon">TS</div>
+        <div>
+          <div class="tech-name">Typst</div>
+          <div class="tech-role">排版与编译引擎</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">CZ</div>
+        <div>
+          <div class="tech-name">CeTZ 0.5.2</div>
+          <div class="tech-role">矢量绘图库</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">PY</div>
+        <div>
+          <div class="tech-name">Python 3.12</div>
+          <div class="tech-role">渲染脚本与校验</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">PL</div>
+        <div>
+          <div class="tech-name">Pillow</div>
+          <div class="tech-role">图像像素分析</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">UV</div>
+        <div>
+          <div class="tech-name">uv</div>
+          <div class="tech-role">Python 依赖管理</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">JS</div>
+        <div>
+          <div class="tech-name">JSON</div>
+          <div class="tech-role">目录元数据格式</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 目录结构 ========== -->
+<section>
+  <div class="container">
+    <div class="section-label">PROJECT LAYOUT</div>
+    <h2>目录结构</h2>
+    <p class="lead">项目采用「源-脚本-产物」三段式布局，职责清晰。</p>
+
+    <div class="dir-tree">
+<span class="dir">cetz-demos/</span>
+├── <span class="dir">sources/</span>          <span class="comment"># 12 个 .typ 场景源码</span>
+│   ├── geometric_proof.typ
+│   ├── phase_field.typ
+│   ├── system_map.typ
+│   ├── neural_architecture.typ
+│   ├── orbital_mechanics.typ
+│   ├── circuit_schematic.typ
+│   ├── bezier_anatomy.typ
+│   ├── timeline_roadmap.typ
+│   ├── matrix_transforms.typ
+│   ├── topographic_map.typ
+│   ├── molecule.typ
+│   └── type_scale.typ
+├── <span class="dir">scripts/</span>          <span class="comment"># 构建脚本</span>
+│   └── render.py           <span class="comment"># 渲染 + 校验主脚本</span>
+├── <span class="dir">out/</span>              <span class="comment"># 渲染产物 (透明 PNG)</span>
+│   └── *-transparent.png
+├── catalog.json            <span class="comment"># 场景目录与元数据</span>
+├── pyproject.toml          <span class="comment"># Python 项目配置</span>
+├── uv.lock                 <span class="comment"># 依赖锁定文件</span>
+└── README.md
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    cetz-demos · 文档原生矢量图集 · 架构文档
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== 动画：数字计数 =====
+  function animateCounter(el, target, duration) {
+    var start = 0;
+    var startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      el.textContent = Math.round(eased * target);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ===== 动画：流水线流动 =====
+  function animatePipeline() {
+    var arrows = [
+      document.getElementById('pipe-1-2'),
+      document.getElementById('pipe-2-3'),
+      document.getElementById('pipe-3-4'),
+      document.getElementById('pipe-4-5')
+    ];
+    var stages = [
+      document.getElementById('pipe-stage-1'),
+      document.getElementById('pipe-stage-2'),
+      document.getElementById('pipe-stage-3'),
+      document.getElementById('pipe-stage-4'),
+      document.getElementById('pipe-stage-5')
+    ];
+    var current = 0;
+
+    function lightUp(idx) {
+      if (idx > 0) {
+        arrows[idx - 1].classList.add('animated');
+        arrows[idx - 1].setAttribute('marker-end', 'url(#pipe-arrow-on)');
+      }
+      var box = stages[idx].querySelector('.node-box');
+      if (box) box.classList.add('accent');
+    }
+
+    function resetPipeline() {
+      arrows.forEach(function(a) {
+        a.classList.remove('animated');
+        a.setAttribute('marker-end', 'url(#pipe-arrow)');
+      });
+      stages.forEach(function(s) {
+        var b = s.querySelector('.node-box');
+        if (b) b.classList.remove('accent');
+      });
+      current = 0;
+    }
+
+    function tick() {
+      lightUp(current);
+      current++;
+      if (current > stages.length) {
+        setTimeout(resetPipeline, 1200);
+        setTimeout(start, 1800);
+      } else {
+        setTimeout(tick, 700);
+      }
+    }
+
+    function start() { tick(); }
+    start();
+  }
+
+  // ===== 动画：三维校验脉冲 =====
+  function animateValidation() {
+    var dims = ['val-t', 'val-v', 'val-c'];
+    var idx = 0;
+    function pulse() {
+      var el = document.getElementById(dims[idx]);
+      if (!el) return;
+      var box = el.querySelector('.node-box');
+      if (box) {
+        box.style.transform = 'scale(1.05)';
+        box.style.transition = 'transform .3s';
+        setTimeout(function() {
+          box.style.transform = 'scale(1)';
+        }, 300);
+      }
+      idx = (idx + 1) % dims.length;
+      setTimeout(pulse, 1000);
+    }
+    pulse();
+  }
+
+  // ===== 走查步骤入场 =====
+  function animateSteps() {
+    var steps = document.querySelectorAll('.step');
+    steps.forEach(function(step, i) {
+      setTimeout(function() {
+        step.classList.add('visible');
+      }, i * 180);
+    });
+  }
+
+  // ===== Intersection Observer =====
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reducedMotion) {
+    var observers = {};
+
+    // 数字计数
+    var counterEl = document.getElementById('count-scenes');
+    if (counterEl) {
+      var counterObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            animateCounter(counterEl, 12, 1200);
+            counterObs.disconnect();
+          }
+        });
+      }, { threshold: 0.5 });
+      counterObs.observe(counterEl);
+    }
+
+    // 流水线动画
+    var pipelineSection = document.getElementById('pipeline');
+    if (pipelineSection) {
+      var pipeObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            animatePipeline();
+            pipeObs.disconnect();
+          }
+        });
+      }, { threshold: 0.2 });
+      pipeObs.observe(pipelineSection);
+    }
+
+    // 校验脉冲
+    var valSection = document.getElementById('validation');
+    if (valSection) {
+      var valObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            animateValidation();
+            valObs.disconnect();
+          }
+        });
+      }, { threshold: 0.2 });
+      valObs.observe(valSection);
+    }
+
+    // 走查步骤
+    var walkSection = document.getElementById('walkthrough');
+    if (walkSection) {
+      var walkObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            animateSteps();
+            walkObs.disconnect();
+          }
+        });
+      }, { threshold: 0.15 });
+      walkObs.observe(walkSection);
+    }
+  } else {
+    // 减弱动画模式：直接显示
+    document.querySelectorAll('.step').forEach(function(s) {
+      s.classList.add('visible');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

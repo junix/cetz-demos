@@ -1,0 +1,260 @@
+\documentclass[border=12pt,varwidth=19cm]{standalone}
+% CeTZ Demos 架构信息图
+% 叙事路径：项目定位 → 核心架构管线 → 12 个场景分类 → 质量保障 → 快速开始
+\usepackage[UTF8,fontset=none]{ctex}
+\IfFontExistsTF{Source Han Serif SC}{
+  \setmainfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
+  \setsansfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
+  \setCJKmainfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
+  \setCJKsansfont[BoldFont={Source Han Serif SC Bold}]{Source Han Serif SC}
+}{
+  \PackageWarningNoLine{tikz-infographic}{Source Han Serif SC not found; using Fandol}
+  \setCJKmainfont[BoldFont={FandolSong-Bold}]{FandolSong-Regular}
+  \setCJKsansfont[BoldFont={FandolHei-Bold}]{FandolHei-Regular}
+}
+\IfFontExistsTF{Sarasa Mono SC}{
+  \setmonofont{Sarasa Mono SC}
+  \setCJKmonofont{Sarasa Mono SC}
+}{
+  \PackageWarningNoLine{tikz-infographic}{Sarasa Mono SC not found; using TeX defaults}
+  \setmonofont{Latin Modern Mono}
+  \setCJKmonofont{FandolFang-Regular}
+}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows.meta,backgrounds,calc,fit,positioning}
+\pgfdeclarelayer{edge layer}
+\pgfsetlayers{background,edge layer,main}
+
+% ── Semantic palette ──────────────────────────────────────────────────────
+\definecolor{Paper}{HTML}{F7F4EE}
+\definecolor{Ink}{HTML}{17212B}
+\definecolor{Slate}{HTML}{5D6873}
+\definecolor{Fog}{HTML}{D9E1E3}
+\definecolor{Ocean}{HTML}{2B5C75}
+\definecolor{Teal}{HTML}{2A9D8F}
+\definecolor{Mint}{HTML}{DDF2EC}
+\definecolor{Coral}{HTML}{E76F51}
+\definecolor{Gold}{HTML}{E9C46A}
+\definecolor{Violet}{HTML}{7B5EA7}
+\definecolor{Lavender}{HTML}{E8E0F2}
+\definecolor{Warm}{HTML}{F0E6D2}
+
+% Helper: sub-text in slate color, small size
+\newcommand{\subtext}[1]{{\color{Slate}\scriptsize #1}}
+\newcommand{\tagtext}[1]{{\ttfamily\tiny\color{Slate} #1}}
+
+\tikzset{
+  every node/.style={font=\rmfamily},
+  % ── Typography tokens ──
+  kicker/.style={font=\rmfamily\scriptsize\bfseries, text=Teal},
+  h1/.style={font=\rmfamily\Large\bfseries, text=Ink},
+  h2/.style={font=\rmfamily\normalsize\bfseries, text=Ink},
+  h3/.style={font=\rmfamily\footnotesize\bfseries, text=Ink},
+  body/.style={font=\rmfamily\scriptsize, text=Ink, align=left},
+  note/.style={font=\rmfamily\scriptsize, text=Slate},
+  mono/.style={font=\ttfamily\scriptsize, text=Ocean},
+  % ── Architecture pipeline ──
+  pipe-box/.style={
+    draw=Ocean!45, fill=white, rounded corners=1.6mm, line width=.75pt,
+    minimum width=34mm, minimum height=20mm, align=center,
+    font=\rmfamily\footnotesize\bfseries, text=Ink, inner sep=5pt
+  },
+  % ── Arrow styles ──
+  flow/.style={
+    -{Latex[length=2.2mm,width=1.6mm]}, draw=Ocean,
+    line width=1pt, rounded corners=2mm
+  },
+  flow-soft/.style={
+    -{Latex[length=2mm,width=1.4mm]}, draw=Slate!55,
+    line width=.7pt, rounded corners=2mm
+  },
+  boundary/.style={draw=Slate!40, dash pattern=on 2pt off 2.4pt, line width=.6pt},
+  % ── Scene cards (legitimate peer set = 12 reference demos) ──
+  scene-card/.style={
+    draw=Ocean!30, fill=white, rounded corners=1.2mm, line width=.6pt,
+    minimum width=32mm, minimum height=24mm, align=center,
+    inner sep=5.5pt, font=\rmfamily\scriptsize\bfseries, text=Ink
+  },
+  % ── Category chips ──
+  chip/.style={
+    rounded corners=2mm, inner xsep=2.5mm, inner ysep=1mm,
+    font=\rmfamily\scriptsize\bfseries
+  },
+  chip-geo/.style={chip, fill=Mint, text=Ocean},
+  chip-sci/.style={chip, fill=Lavender, text=Violet},
+  chip-eng/.style={chip, fill=Warm, text=Coral!80!black},
+  chip-des/.style={chip, fill=Gold!30, text=Gold!60!black},
+  % ── Quality badge ──
+  badge/.style={
+    circle, draw=Teal, fill=Teal, text=white,
+    inner sep=0pt, minimum size=5mm,
+    font=\rmfamily\scriptsize\bfseries
+  },
+  % ── Pill ──
+  pill/.style={
+    rounded corners=3mm, fill=Mint, text=Ocean,
+    inner xsep=2.8mm, inner ysep=1.2mm,
+    font=\rmfamily\scriptsize\bfseries
+  }
+}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % ── Paper background ──
+  \begin{pgfonlayer}{background}
+    \fill[Paper,rounded corners=2mm] (-.6,0.4) rectangle (18.2,26.0);
+  \end{pgfonlayer}
+
+  % ═══════════════════════════════════════════════════════════════
+  % SECTION 1 — 标题与项目定位
+  % ═══════════════════════════════════════════════════════════════
+  \node[kicker,anchor=west] at (0,25.4) {ARCHITECTURE / 架构信息图};
+  \node[h1,anchor=west] at (0,24.75) {CeTZ Demos — 文档原生矢量绘图参考库};
+  \node[note,anchor=west,text width=12cm] at (0,24.15)
+    {基于 Typst 与 CeTZ 0.5.2，覆盖十二个跨学科场景，从源码到透明 PNG 的全链路可复现。};
+  \node[pill,anchor=east] at (17.7,24.75) {12 个场景 · 全矢量 · 可复现};
+
+  % 顶部装饰线
+  \draw[boundary] (0,23.5) -- (17.7,23.5);
+
+  % ═══════════════════════════════════════════════════════════════
+  % SECTION 2 — 核心架构管线（视觉主角：从源码到输出的四步流）
+  % ═══════════════════════════════════════════════════════════════
+  \node[kicker,anchor=west] at (0,22.9) {核心架构};
+  \node[h2,anchor=west] at (0,22.35) {从 Typst 源码到透明 PNG 的编译管线};
+
+  % 四个管线节点（\\ 不放在分组内，避免 TikZ align 模式下解析错误）
+  \node[pipe-box] (src) at (2.2,20.6)
+    {Typst 源码\\[3pt]\subtext{sources/*.typ}\\\subtext{12 个 .typ 文件}};
+  \node[pipe-box] (cetz) at (6.9,20.6)
+    {CeTZ 绘图库\\[3pt]\subtext{@preview/cetz:0.5.2}\\\subtext{画布 · 图元 · 坐标}};
+  \node[pipe-box] (typst) at (11.6,20.6)
+    {Typst 编译器\\[3pt]\subtext{typst compile}\\\subtext{--ppi 190}};
+  \node[pipe-box] (out) at (16.3,20.6)
+    {透明 PNG 输出\\[3pt]\subtext{out/*-transparent.png}\\\subtext{RGBA · 190 PPI}};
+
+  \begin{pgfonlayer}{edge layer}
+    \draw[flow] (src.east) -- (cetz.west);
+    \draw[flow] (cetz.east) -- (typst.west);
+    \draw[flow] (typst.east) -- (out.west);
+  \end{pgfonlayer}
+
+  % 管线标签
+  \node[note,anchor=south] at ($(src.east)!0.5!(cetz.west)$) {导入绘图原语};
+  \node[note,anchor=south] at ($(cetz.east)!0.5!(typst.west)$) {布局与排版};
+  \node[note,anchor=south] at ($(typst.east)!0.5!(out.west)$) {栅格化输出};
+
+  % 质量门（放在输出下方，边界线之上，不穿越分界线）
+  \node[badge,anchor=north] (q1) at (16.3,19.5) {Q};
+  \node[note,anchor=north,text width=3.2cm,align=center] at (16.3,18.8)
+    {质量门校验\\透明 · 可见 · 彩色};
+
+  \begin{pgfonlayer}{edge layer}
+    \draw[flow-soft] (out.south) -- (q1.north);
+  \end{pgfonlayer}
+
+  % 渲染器说明（分界线在质量门下方断开，右侧保留质量门区域）
+  \draw[boundary] (0,18.2) -- (14.5,18.2);
+  \node[note,anchor=west,text width=14cm] at (0,17.75)
+    {\textbf{scripts/render.py}：调用系统 Typst 编译器批量渲染全部场景，通过 Pillow 校验 RGBA 直方图，
+    确保输出非空白、非单色、非全不透明，弱输出直接报错退出。};
+
+  % ═══════════════════════════════════════════════════════════════
+  % SECTION 3 — 12 个场景分类
+  % ═══════════════════════════════════════════════════════════════
+  \node[kicker,anchor=west] at (0,16.7) {场景画廊};
+  \node[h2,anchor=west] at (0,16.15) {十二个跨学科参考场景};
+  \node[note,anchor=west,text width=11cm] at (0,15.65)
+    {每个场景均有独立 .typ 源码、educational/design 用途说明与复杂度标签，由 catalog.json 统一登记。};
+
+  % 分类标签行
+  \node[chip-geo] at (2.4,14.9) {几何与数学};
+  \node[chip-sci] at (7.1,14.9) {科学与工程};
+  \node[chip-eng] at (11.9,14.9) {系统与架构};
+  \node[chip-des] at (16.2,14.9) {设计与规划};
+
+  % ── 第一行：几何与数学 (3) ──
+  \node[scene-card] (g1) at (2.2,13.1)
+    {九点圆几何证明\\[4pt]\tagtext{geometric\_proof}\\\tagtext{几何 · 构造}};
+  \node[scene-card] (g2) at (5.7,13.1)
+    {Bézier 曲线解剖\\[4pt]\tagtext{bezier\_anatomy}\\\tagtext{矢量 · 控制柄}};
+  \node[scene-card] (g3) at (9.2,13.1)
+    {矩阵变换\\[1pt]\subtext{\scriptsize（基向量变化）}\\[2pt]\tagtext{matrix\_transforms}\\\tagtext{线性代数 · 教育}};
+
+  % ── 第二行：科学与工程 (4) ──
+  \node[scene-card] (s1) at (2.2,10.7)
+    {相场极限环\\[4pt]\tagtext{phase\_field}\\\tagtext{动力系统 · 向量场}};
+  \node[scene-card] (s2) at (5.7,10.7)
+    {轨道力学\\[1pt]\subtext{\scriptsize（转移轨道）}\\[2pt]\tagtext{orbital\_mechanics}\\\tagtext{航天 · 物理}};
+  \node[scene-card] (s3) at (9.2,10.7)
+    {电路原理图\\[1pt]\subtext{\scriptsize（传感前端）}\\[2pt]\tagtext{circuit\_schematic}\\\tagtext{电子 · 工程}};
+  \node[scene-card] (s4) at (12.7,10.7)
+    {分子结构图\\[4pt]\tagtext{molecule}\\\tagtext{化学 · 官能团}};
+
+  % ── 第三行：系统与架构 (3) ──
+  \node[scene-card] (e1) at (2.2,8.3)
+    {语义视觉编译器\\[4pt]\tagtext{system\_map}\\\tagtext{架构 · 管线}};
+  \node[scene-card] (e2) at (5.7,8.3)
+    {神经网络架构\\[1pt]\subtext{\scriptsize（残差块）}\\[2pt]\tagtext{neural\_architecture}\\\tagtext{ML · 层维度}};
+  \node[scene-card] (e3) at (9.2,8.3)
+    {地形等高线图\\[4pt]\tagtext{topographic\_map}\\\tagtext{地形 · 排水}};
+
+  % ── 第四行：设计与规划 (2) ──
+  \node[scene-card] (d1) at (2.2,5.9)
+    {路线图时间线\\[1pt]\subtext{\scriptsize（工作流与门禁）}\\[2pt]\tagtext{timeline\_roadmap}\\\tagtext{规划 · 依赖}};
+  \node[scene-card] (d2) at (5.7,5.9)
+    {排版字号体系\\[4pt]\tagtext{type\_scale}\\\tagtext{设计系统 · 层级}};
+
+  % 右侧说明区（放在第 4 列卡片右侧，不与卡片重叠）
+  \node[h3,anchor=west] at (14.5,13.55) {12 个场景};
+  \node[body,anchor=north west,text width=3.5cm] at (14.5,13.2)
+    {覆盖 4 大类视觉家族：\\[2pt]
+    · 几何 / 数学讲解\\
+    · 相图 / 电路 / 分子\\
+    · 系统 / 网络 / 地形\\
+    · 路线 / 设计样本};
+
+  \node[h3,anchor=west] at (14.5,10.9) {catalog.json};
+  \node[body,anchor=north west,text width=3.5cm] at (14.5,10.5)
+    {每个场景登记：\\[2pt]
+    · id / use / question\\
+    · family / complexity / tags\\[4pt]
+    共 12 条，id 唯一。};
+
+  % ═══════════════════════════════════════════════════════════════
+  % SECTION 4 — 质量保障与验证
+  % ═══════════════════════════════════════════════════════════════
+  \draw[boundary] (0,5.0) -- (17.7,5.0);
+  \node[kicker,anchor=west] at (0,4.4) {质量保障};
+  \node[h2,anchor=west] at (0,3.85) {三重校验 · 拒绝弱输出};
+
+  % 三个校验维度
+  \node[badge] (b1) at (1.5,2.6) {1};
+  \node[h3,anchor=west] at (2.2,2.9) {透明度校验};
+  \node[body,anchor=north west,text width=4.6cm] at (2.2,2.6)
+    {透明像素占比 ≥ 5\%，确保背景未被意外填充，输出可直接嵌入文档。};
+
+  \node[badge] (b2) at (7.2,2.6) {2};
+  \node[h3,anchor=west] at (7.9,2.9) {可见像素校验};
+  \node[body,anchor=north west,text width=4.6cm] at (7.9,2.6)
+    {非透明可见像素 ≥ 2.5\%，排除全空画布或几乎看不见的渲染失败。};
+
+  \node[badge] (b3) at (12.9,2.6) {3};
+  \node[h3,anchor=west] at (13.6,2.9) {色彩像素校验};
+  \node[body,anchor=north west,text width=4.6cm] at (13.6,2.6)
+    {彩色像素数 ≥ 1000，确保图像有足够的色彩信息而非灰度草图。};
+
+  % ═══════════════════════════════════════════════════════════════
+  % SECTION 5 — 快速开始
+  % ═══════════════════════════════════════════════════════════════
+  \draw[boundary] (0,1.3) -- (17.7,1.3);
+  \node[kicker,anchor=west] at (0,0.8) {快速开始};
+  \node[h3,anchor=west] at (0,0.3) {两行命令，构建全部 12 个场景：};
+  \node[mono,anchor=east] at (17.7,0.3)
+    {\$ uv sync \quad|\quad \$ uv run python scripts/render.py};
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,132 @@
+{
+  "source": "architecture-infographic.tex",
+  "project": "cetz-demos",
+  "project_path": "~/projects/plot/cetz-demos",
+  "output_dir": "docs/",
+  "language": "zh-CN",
+  "engine": "xelatex",
+  "engine_version": "XeTeX 3.141592653-2.6-0.999995 (TeX Live 2023)",
+  "dpi": 200,
+  "artifacts": {
+    "tex": {
+      "path": "architecture-infographic.tex",
+      "description": "Editable TikZ/LaTeX source",
+      "size_bytes": 13072
+    },
+    "pdf": {
+      "path": "architecture-infographic.pdf",
+      "description": "Canonical vector output (PDF)",
+      "size_bytes": 132097,
+      "page_count": 1,
+      "width_pt": 562.49,
+      "height_pt": 759.97
+    },
+    "png": {
+      "path": "architecture-infographic.png",
+      "description": "Raster proof at 200 DPI",
+      "size_bytes": 456925,
+      "width_px": 1563,
+      "height_px": 2112,
+      "width_to_height": 0.7401
+    },
+    "svg": {
+      "path": "architecture-infographic.svg",
+      "description": "SVG vector conversion (dvisvgm)",
+      "size_bytes": 949339
+    }
+  },
+  "visual_contract": {
+    "audience": "开发者、设计师、技术学习者",
+    "thesis": "CeTZ Demos 是基于 Typst + CeTZ 0.5.2 的文档原生矢量绘图参考库，提供 12 个跨学科的可复现绘图场景",
+    "reader_question": "这个项目是什么、由什么组成、如何工作、如何使用",
+    "narrative_order": ["标题与定位", "核心架构管线", "12 个场景画廊", "质量保障机制", "快速开始"],
+    "reading_direction": "top-to-bottom",
+    "medium": "static vector infographic",
+    "dimensions_cm": {
+      "width": 19.8,
+      "height": 26.7
+    },
+    "formats": ["tex", "pdf", "svg", "png"]
+  },
+  "narrative_sections": [
+    {
+      "id": "header",
+      "title": "项目定位",
+      "claim": "CeTZ Demos 是文档原生矢量绘图参考库",
+      "evidence": "基于 Typst 与 CeTZ 0.5.2，覆盖 12 个跨学科场景，全链路可复现"
+    },
+    {
+      "id": "pipeline",
+      "title": "核心架构管线",
+      "claim": "从 Typst 源码经 CeTZ 绘图库到透明 PNG 的四步编译流",
+      "stages": ["Typst 源码", "CeTZ 绘图库", "Typst 编译器", "透明 PNG 输出"],
+      "quality_gate": "三重像素校验（透明 ≥ 5%、可见 ≥ 2.5%、彩色 ≥ 1000）"
+    },
+    {
+      "id": "gallery",
+      "title": "12 个场景画廊",
+      "claim": "覆盖四大类视觉家族的 12 个参考场景",
+      "categories": {
+        "几何与数学": ["geometric_proof", "bezier_anatomy", "matrix_transforms"],
+        "科学与工程": ["phase_field", "orbital_mechanics", "circuit_schematic", "molecule"],
+        "系统与架构": ["system_map", "neural_architecture", "topographic_map"],
+        "设计与规划": ["timeline_roadmap", "type_scale"]
+      },
+      "metadata_source": "catalog.json"
+    },
+    {
+      "id": "quality",
+      "title": "质量保障",
+      "claim": "三重校验拒绝弱输出",
+      "checks": ["透明度校验", "可见像素校验", "色彩像素校验"]
+    },
+    {
+      "id": "quickstart",
+      "title": "快速开始",
+      "claim": "两行命令构建全部场景",
+      "commands": ["uv sync", "uv run python scripts/render.py"]
+    }
+  ],
+  "provenance": {
+    "data_sources": [
+      {
+        "path": "README.md",
+        "type": "project description",
+        "facts_used": ["项目名称", "12 个场景", "CeTZ 0.5.2", "透明 PNG 输出", "渲染命令"]
+      },
+      {
+        "path": "catalog.json",
+        "type": "scene metadata",
+        "facts_used": ["12 个场景 id", "use/question/family/complexity/tags"]
+      },
+      {
+        "path": "scripts/render.py",
+        "type": "renderer implementation",
+        "facts_used": ["质量门阈值（5%/2.5%/1000）", "Pillow RGBA 校验", "typst compile --ppi 190"]
+      },
+      {
+        "path": "sources/*.typ",
+        "type": "source files",
+        "facts_used": ["CeTZ 0.5.2", "画布/图元/坐标系统"]
+      }
+    ],
+    "renderer": "create-infographic skill (render_tikz.py)",
+    "backend": "TikZ/PGF via XeLaTeX"
+  },
+  "verification": {
+    "compile_success": true,
+    "identity_match": true,
+    "expected_text": "CeTZ Demos",
+    "geometry_pass": true,
+    "composition_pass": false,
+    "composition_notes": [
+      "2 处 connector_through_block：场景卡片区的边界虚线被检测为块，属于视觉分界线而非缺陷",
+      "1 处 text_straddles_block_edge：管线标签与管道框间距接近，视觉上清晰可辨"
+    ],
+    "cjk_font_used": "Source Han Serif SC",
+    "mono_font_used": "Sarasa Mono SC",
+    "visual_inspection": "pass"
+  },
+  "build_command": "cd docs && python3 /Users/junix/.claude/skills/create-infographic/scripts/render_tikz.py architecture-infographic.tex --out-dir /tmp/out --engine xelatex --dpi 200 --svg --expect-text 'CeTZ Demos'",
+  "created": "2026-08-24"
+}
