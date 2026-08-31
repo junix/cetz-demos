@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>cetz-demos — gallery</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#fff; --ink:#16181d; --muted:#5f6570; --faint:#8b929e;
+  --line:#e3e1dc; --accent:#2f6f5e; --chip:#eef1ef; --code:#f6f5f2;
+  --shadow:0 1px 2px rgba(20,22,26,.05),0 8px 24px -12px rgba(20,22,26,.18);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#0f1114; --panel:#161a1f; --ink:#e8eaee; --muted:#a2abb8; --faint:#727d8c;
+  --line:#262c34; --accent:#6fd3b0; --chip:#1d232a; --code:#12161a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+}}
+:root[data-theme=dark]{
+  --bg:#0f1114; --panel:#161a1f; --ink:#e8eaee; --muted:#a2abb8; --faint:#727d8c;
+  --line:#262c34; --accent:#6fd3b0; --chip:#1d232a; --code:#12161a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:56px 28px 96px}
+header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:40px}
+h1{margin:0;font-size:30px;letter-spacing:-.02em;font-weight:650}
+.tagline{margin:10px 0 0;color:var(--muted);max-width:70ch;font-size:16px}
+.meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pill{font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 11px}
+.pill b{color:var(--ink);font-weight:600}
+.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.shot{margin:0;padding:16px;display:flex;flex-direction:column;gap:10px;
+  align-items:center;justify-content:center;height:250px;border-bottom:1px solid var(--line)}
+.shot.tall{height:400px}
+.shot.checker{background-color:#f2f1ee;background-image:
+  linear-gradient(45deg,#e2e0dc 25%,transparent 25%,transparent 75%,#e2e0dc 75%),
+  linear-gradient(45deg,#e2e0dc 25%,transparent 25%,transparent 75%,#e2e0dc 75%);
+  background-size:16px 16px;background-position:0 0,8px 8px}
+.shot.dark{background:#11151a}
+.shot.light{background:#fff}
+.shot img,.shot video{max-width:100%;max-height:100%;width:auto;height:auto;
+  object-fit:contain;display:block;border-radius:3px}
+.shot.multi img{max-height:calc(50% - 5px)}
+.shot .missing{color:var(--faint);font-size:13px;font-style:italic;text-align:center}
+.body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.idx{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--faint);
+  letter-spacing:.09em;text-transform:uppercase}
+h2{margin:0;font-size:17px;font-weight:620;letter-spacing:-.01em}
+.blurb{margin:0;color:var(--muted);font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tag{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  background:var(--chip);border-radius:5px;padding:4px 7px}
+details{margin-top:auto;border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--accent);list-style:none;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+pre{margin:12px 0 0;background:var(--code);border:1px solid var(--line);border-radius:8px;
+  padding:14px;overflow-x:auto;font:12px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+  max-height:440px;overflow-y:auto}
+pre .c{color:var(--faint);font-style:italic}
+pre .s{color:var(--accent)}
+pre .n{color:#b1784f}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) pre .n{color:#d8a06a}}
+:root[data-theme=dark] pre .n{color:#d8a06a}
+.extra{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--faint)}
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);
+  color:var(--faint);font-size:13px}
+footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
+  font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>cetz-demos</h1>
+    <p class="tagline">Twelve CeTZ studies, each a finished figure rather than a feature probe — constructive geometry, phase portraits, circuit schematics, orbital transfers and typographic specimens, all drawn in Typst and rendered to transparent PNG.</p>
+    <div class="meta"><span class="pill">CeTZ 0.5 · Typst</span><span class="pill"><b>12</b> demos</span><span class="pill"><b>12</b> rendered</span></div>
+  </header>
+  <main class="grid">
+      <article class="card">
+        <figure class="shot dark"><img src="out/bezier_anatomy-transparent.png" alt="Bezier anatomy" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">01 · geometry anatomy</div>
+          <h2>Bezier anatomy</h2>
+          <p class="blurb">How do control handles determine curve shape?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">bezier</span><span class="tag">vector</span><span class="tag">advanced</span></div>
+          <details><summary>src/bezier_anatomy.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.25cm,{ import cetz.draw: *</span>
+  content((<span class="n">0</span>,<span class="n">7</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[CUBIC BÉZIER ANATOMY])
+  content((<span class="n">0</span>,<span class="n">6.5</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[ANCHORS · TANGENT HANDLES · CURVATURE ENVELOPE])
+  let p0=(.<span class="n">5</span>,<span class="n">1.2</span>); let p1=(<span class="n">3.2</span>,<span class="n">6.0</span>); let p2=(<span class="n">8.2</span>,-.<span class="n">3</span>); let p3=(<span class="n">11.7</span>,<span class="n">4.9</span>)
+  line(p0,p1,stroke:(paint:rgb(<span class="s">&quot;#7b9cff88&quot;</span>),dash:<span class="s">&quot;dashed&quot;</span>,thickness:<span class="n">1</span>pt)); line(p2,p3,stroke:(paint:rgb(<span class="s">&quot;#7b9cff88&quot;</span>),dash:<span class="s">&quot;dashed&quot;</span>,thickness:<span class="n">1</span>pt))
+  bezier(p0,p1,p2,p3,stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),thickness:<span class="n">2.6</span>pt))
+  for item in ((p0,[P₀]),(p1,[P₁]),(p2,[P₂]),(p3,[P₃])) { circle(item.at(<span class="n">0</span>),radius:.<span class="n">11</span>,fill:rgb(<span class="s">&quot;#54d6c6&quot;</span>),stroke:none); content((item.at(<span class="n">0</span>).at(<span class="n">0</span>)+.<span class="n">18</span>,item.at(<span class="n">0</span>).at(<span class="n">1</span>)+.<span class="n">18</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#54d6c6&quot;</span>))[<span class="c">#item.at(1)]) }</span>
+  for k in range(<span class="n">1</span>,<span class="n">10</span>) { let t=k/<span class="n">10</span>; let x=(<span class="n">1</span>-t)*(<span class="n">1</span>-t)*(<span class="n">1</span>-t)*p0.at(<span class="n">0</span>)+<span class="n">3</span>*(<span class="n">1</span>-t)*(<span class="n">1</span>-t)*t*p1.at(<span class="n">0</span>)+<span class="n">3</span>*(<span class="n">1</span>-t)*t*t*p2.at(<span class="n">0</span>)+t*t*t*p3.at(<span class="n">0</span>); let y=(<span class="n">1</span>-t)*(<span class="n">1</span>-t)*(<span class="n">1</span>-t)*p0.at(<span class="n">1</span>)+<span class="n">3</span>*(<span class="n">1</span>-t)*(<span class="n">1</span>-t)*t*p1.at(<span class="n">1</span>)+<span class="n">3</span>*(<span class="n">1</span>-t)*t*t*p2.at(<span class="n">1</span>)+t*t*t*p3.at(<span class="n">1</span>); circle((x,y),radius:.<span class="n">045</span>,fill:rgb(<span class="s">&quot;#ffd166&quot;</span>),stroke:none) }
+  content((<span class="n">8.7</span>,<span class="n">5.9</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[B(t) = Σ bᵢ,₃(t)Pᵢ])
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/circuit_schematic-transparent.png" alt="Circuit schematic" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">02 · circuit</div>
+          <h2>Circuit schematic</h2>
+          <p class="blurb">How does a sensor front end condition a signal?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">circuit</span><span class="tag">engineering</span><span class="tag">advanced</span></div>
+          <details><summary>src/circuit_schematic.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.2cm,{ import cetz.draw: *</span>
+  content((<span class="n">0</span>,<span class="n">7</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[LOW-NOISE SENSOR FRONT END])
+  content((<span class="n">0</span>,<span class="n">6.5</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[PROTECTION · INSTRUMENTATION AMPLIFIER · ACTIVE FILTER · ADC])
+  line((<span class="n">0</span>,<span class="n">3.4</span>),(<span class="n">13.2</span>,<span class="n">3.4</span>),stroke:(paint:rgb(<span class="s">&quot;#8fa9bc&quot;</span>),thickness:<span class="n">1.4</span>pt))
+  circle((.<span class="n">5</span>,<span class="n">3.4</span>),radius:.<span class="n">36</span>,stroke:(paint:rgb(<span class="s">&quot;#54d6c6&quot;</span>),thickness:<span class="n">1.4</span>pt)); content((.<span class="n">05</span>,<span class="n">2.7</span>),text(size:<span class="n">7</span>pt)[SENSOR])
+  line((<span class="n">1.2</span>,<span class="n">2.7</span>),(<span class="n">1.2</span>,<span class="n">4.1</span>),(<span class="n">1.65</span>,<span class="n">3.4</span>),(<span class="n">1.2</span>,<span class="n">2.7</span>),stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),thickness:<span class="n">1.2</span>pt)); line((<span class="n">1.72</span>,<span class="n">2.65</span>),(<span class="n">1.72</span>,<span class="n">4.15</span>),stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),thickness:<span class="n">1.2</span>pt))
+  rect((<span class="n">2.5</span>,<span class="n">2.45</span>),(<span class="n">5.0</span>,<span class="n">4.35</span>),radius:.<span class="n">12</span>,fill:rgb(<span class="s">&quot;#29345c&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">1.4</span>pt)); content((<span class="n">3.75</span>,<span class="n">3.4</span>),anchor:<span class="s">&quot;center&quot;</span>,text(size:<span class="n">8</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[INA · G=<span class="n">48</span>])
+  for x in (<span class="n">5.6</span>,<span class="n">6.7</span>,<span class="n">7.8</span>) { line((x,<span class="n">2.8</span>),(x,<span class="n">4.0</span>),stroke:(paint:rgb(<span class="s">&quot;#ffd166&quot;</span>),thickness:<span class="n">1.4</span>pt)); line((x+.<span class="n">18</span>,<span class="n">2.8</span>),(x+.<span class="n">18</span>,<span class="n">4.0</span>),stroke:(paint:rgb(<span class="s">&quot;#ffd166&quot;</span>),thickness:<span class="n">1.4</span>pt)) }
+  rect((<span class="n">8.6</span>,<span class="n">2.45</span>),(<span class="n">10.8</span>,<span class="n">4.35</span>),radius:.<span class="n">12</span>,fill:rgb(<span class="s">&quot;#173f3e&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#54d6c6&quot;</span>),thickness:<span class="n">1.4</span>pt)); content((<span class="n">9.7</span>,<span class="n">3.4</span>),anchor:<span class="s">&quot;center&quot;</span>,text(size:<span class="n">8</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[<span class="n">4</span>th ORDER LPF])
+  rect((<span class="n">11.5</span>,<span class="n">2.45</span>),(<span class="n">13.2</span>,<span class="n">4.35</span>),radius:.<span class="n">12</span>,fill:rgb(<span class="s">&quot;#48263b&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),thickness:<span class="n">1.4</span>pt)); content((<span class="n">12.35</span>,<span class="n">3.4</span>),anchor:<span class="s">&quot;center&quot;</span>,text(size:<span class="n">8</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[<span class="n">24</span>-bit ADC])
+  for x in (<span class="n">2.2</span>,<span class="n">5.3</span>,<span class="n">8.3</span>,<span class="n">11.2</span>,<span class="n">13.45</span>) { circle((x,<span class="n">3.4</span>),radius:.<span class="n">06</span>,fill:rgb(<span class="s">&quot;#dcebf5&quot;</span>),stroke:none) }
+  content((<span class="n">2.5</span>,<span class="n">1.6</span>),text(size:<span class="n">7</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[noise budget  <span class="n">8.2</span> nV/√Hz]); content((<span class="n">8.6</span>,<span class="n">1.6</span>),text(size:<span class="n">7</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[fc  <span class="n">42</span> Hz  ·  ENOB  <span class="n">20.1</span>])
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/geometric_proof-transparent.png" alt="Geometric proof" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">03 · geometric proof</div>
+          <h2>Geometric proof</h2>
+          <p class="blurb">How is the nine-point circle constructed?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">geometry</span><span class="tag">construction</span><span class="tag">advanced</span></div>
+          <details><summary>src/geometric_proof.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width: auto, height: auto, margin: 24pt, fill: none)</span>
+<span class="c">#set text(font: &quot;Avenir Next&quot;, fill: rgb(&quot;#dcebf5&quot;))</span>
+
+<span class="c">#cetz.canvas(length: 1.3cm, {</span>
+  import cetz.draw: *
+  content((<span class="n">0</span>, <span class="n">7.3</span>), text(size: <span class="n">22</span>pt, weight: <span class="s">&quot;bold&quot;</span>)[THE NINE-POINT CIRCLE])
+  content((<span class="n">0</span>, <span class="n">6.75</span>), text(size: <span class="n">9</span>pt, fill: rgb(<span class="s">&quot;#7f9db2&quot;</span>))[A CONSTRUCTIVE GEOMETRY STUDY])
+  line((<span class="n">0</span>, <span class="n">6.45</span>), (<span class="n">4.2</span>, <span class="n">6.45</span>), stroke: (paint: rgb(<span class="s">&quot;#52758c&quot;</span>), thickness: <span class="n">0.8</span>pt))
+  let a = (<span class="n">1.0</span>, <span class="n">0.5</span>)
+  let b = (<span class="n">9.6</span>, <span class="n">1.2</span>)
+  let c = (<span class="n">5.4</span>, <span class="n">6.0</span>)
+  line(a, b, c, close: true, stroke: (paint: rgb(<span class="s">&quot;#8fa9bc&quot;</span>), thickness: <span class="n">1.5</span>pt))
+  line(a, (<span class="n">5.3</span>, <span class="n">0.85</span>), stroke: (paint: rgb(<span class="s">&quot;#ff6f91&quot;</span>), dash: <span class="s">&quot;dashed&quot;</span>, thickness: <span class="n">1</span>pt))
+  line(b, (<span class="n">7.5</span>, <span class="n">3.6</span>), stroke: (paint: rgb(<span class="s">&quot;#54d6c6&quot;</span>), dash: <span class="s">&quot;dashed&quot;</span>, thickness: <span class="n">1</span>pt))
+  line(c, (<span class="n">3.2</span>, <span class="n">3.25</span>), stroke: (paint: rgb(<span class="s">&quot;#ffd166&quot;</span>), dash: <span class="s">&quot;dashed&quot;</span>, thickness: <span class="n">1</span>pt))
+  circle((<span class="n">5.32</span>, <span class="n">3.03</span>), radius: <span class="n">2.25</span>, fill: rgb(<span class="s">&quot;#7b9cff22&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#7b9cff&quot;</span>), thickness: <span class="n">1.8</span>pt))
+  for item in ((a, [A], rgb(<span class="s">&quot;#ff6f91&quot;</span>)), (b, [B], rgb(<span class="s">&quot;#54d6c6&quot;</span>)), (c, [C], rgb(<span class="s">&quot;#ffd166&quot;</span>)), ((<span class="n">5.3</span>, <span class="n">0.85</span>), [Mₐ], rgb(<span class="s">&quot;#ff6f91&quot;</span>)), ((<span class="n">7.5</span>, <span class="n">3.6</span>), [M_b], rgb(<span class="s">&quot;#54d6c6&quot;</span>)), ((<span class="n">3.2</span>, <span class="n">3.25</span>), [M_c], rgb(<span class="s">&quot;#ffd166&quot;</span>))) {
+    circle(item.at(<span class="n">0</span>), radius: <span class="n">0.10</span>, fill: item.at(<span class="n">2</span>), stroke: none)
+    content((item.at(<span class="n">0</span>).at(<span class="n">0</span>) + <span class="n">0.18</span>, item.at(<span class="n">0</span>).at(<span class="n">1</span>) + <span class="n">0.16</span>), text(size: <span class="n">8</span>pt, fill: item.at(<span class="n">2</span>))[<span class="c">#item.at(1)])</span>
+  }
+  content((<span class="n">10.1</span>, <span class="n">5.75</span>), text(size: <span class="n">8</span>pt, fill: rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[CONSTRUCTION])
+  content((<span class="n">10.1</span>, <span class="n">5.25</span>), text(size: <span class="n">9</span>pt)[<span class="n">1</span>  Bisect each side])
+  content((<span class="n">10.1</span>, <span class="n">4.72</span>), text(size: <span class="n">9</span>pt)[<span class="n">2</span>  Drop three altitudes])
+  content((<span class="n">10.1</span>, <span class="n">4.19</span>), text(size: <span class="n">9</span>pt)[<span class="n">3</span>  Observe one circle])
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/matrix_transforms-transparent.png" alt="Matrix transforms" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">04 · math explainer</div>
+          <h2>Matrix transforms</h2>
+          <p class="blurb">How do basis vectors change under chained transforms?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">matrix</span><span class="tag">education</span><span class="tag">advanced</span></div>
+          <details><summary>src/matrix_transforms.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.15cm,{ import cetz.draw: *</span>
+  content((-<span class="n">1</span>,<span class="n">7.2</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[CHAINED LINEAR TRANSFORMS])
+  content((-<span class="n">1</span>,<span class="n">6.7</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[BASIS · SHEAR · ROTATION · EIGENDIRECTIONS])
+  for panel in range(<span class="n">0</span>,<span class="n">3</span>) {
+    let ox = panel * <span class="n">5</span>
+    for i in range(-<span class="n">2</span>,<span class="n">3</span>) {
+      line((ox + i,-<span class="n">2</span>),(ox + i,<span class="n">3</span>),stroke:(paint:rgb(<span class="s">&quot;#5e789033&quot;</span>),thickness:.<span class="n">5</span>pt))
+      line((ox - <span class="n">2</span>,i + .<span class="n">5</span>),(ox + <span class="n">2</span>,i + .<span class="n">5</span>),stroke:(paint:rgb(<span class="s">&quot;#5e789033&quot;</span>),thickness:.<span class="n">5</span>pt))
+    }
+    line((ox - <span class="n">2</span>,.<span class="n">5</span>),(ox + <span class="n">2.3</span>,.<span class="n">5</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#8fa9bc&quot;</span>),thickness:<span class="n">1</span>pt))
+    line((ox,-<span class="n">2</span>),(ox,<span class="n">3.2</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#8fa9bc&quot;</span>),thickness:<span class="n">1</span>pt))
+  }
+  line((<span class="n">0</span>,.<span class="n">5</span>),(<span class="n">1.5</span>,.<span class="n">5</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#54d6c6&quot;</span>),thickness:<span class="n">2</span>pt)); line((<span class="n">0</span>,.<span class="n">5</span>),(<span class="n">0</span>,<span class="n">2.1</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">2</span>pt))
+  line((<span class="n">5</span>,.<span class="n">5</span>),(<span class="n">6.7</span>,.<span class="n">5</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#54d6c6&quot;</span>),thickness:<span class="n">2</span>pt)); line((<span class="n">5</span>,.<span class="n">5</span>),(<span class="n">6.1</span>,<span class="n">2.1</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">2</span>pt))
+  line((<span class="n">10</span>,.<span class="n">5</span>),(<span class="n">11.25</span>,<span class="n">1.7</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#54d6c6&quot;</span>),thickness:<span class="n">2</span>pt)); line((<span class="n">10</span>,.<span class="n">5</span>),(<span class="n">9.15</span>,<span class="n">2.0</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">2</span>pt))
+  content((-<span class="n">1</span>,-<span class="n">2.7</span>),text(size:<span class="n">8</span>pt)[I]); content((<span class="n">4</span>,-<span class="n">2.7</span>),text(size:<span class="n">8</span>pt)[S = (<span class="n">1</span>  .<span class="n">7</span>; <span class="n">0</span>  <span class="n">1</span>)]); content((<span class="n">9</span>,-<span class="n">2.7</span>),text(size:<span class="n">8</span>pt)[R(<span class="n">38</span>°) · S])
+  line((<span class="n">2.2</span>,.<span class="n">5</span>),(<span class="n">2.8</span>,.<span class="n">5</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#ffd166&quot;</span>),thickness:<span class="n">1.5</span>pt)); line((<span class="n">7.2</span>,.<span class="n">5</span>),(<span class="n">7.8</span>,.<span class="n">5</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#ffd166&quot;</span>),thickness:<span class="n">1.5</span>pt))
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/molecule-transparent.png" alt="Molecule" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">05 · molecular diagram</div>
+          <h2>Molecule</h2>
+          <p class="blurb">How are functional groups positioned in a molecule?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">chemistry</span><span class="tag">graph</span><span class="tag">advanced</span></div>
+          <details><summary>src/molecule.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.25cm,{ import cetz.draw: *</span>
+  content((<span class="n">0</span>,<span class="n">7</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[CAFFEINE · STRUCTURE MAP])
+  content((<span class="n">0</span>,<span class="n">6.5</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[RING GEOMETRY · FUNCTIONAL GROUPS · ELECTRON DENSITY CUES])
+  let pts=((<span class="n">2</span>,<span class="n">3.3</span>),(<span class="n">3.5</span>,<span class="n">5.3</span>),(<span class="n">6</span>,<span class="n">5.0</span>),(<span class="n">7</span>,<span class="n">2.8</span>),(<span class="n">5.4</span>,<span class="n">1.1</span>),(<span class="n">3</span>,<span class="n">1.3</span>),(<span class="n">8.9</span>,<span class="n">4.1</span>),(<span class="n">10.6</span>,<span class="n">2.6</span>),(<span class="n">9.6</span>,.<span class="n">6</span>))
+  for e in ((<span class="n">0</span>,<span class="n">1</span>),(<span class="n">1</span>,<span class="n">2</span>),(<span class="n">2</span>,<span class="n">3</span>),(<span class="n">3</span>,<span class="n">4</span>),(<span class="n">4</span>,<span class="n">5</span>),(<span class="n">5</span>,<span class="n">0</span>),(<span class="n">2</span>,<span class="n">6</span>),(<span class="n">6</span>,<span class="n">7</span>),(<span class="n">7</span>,<span class="n">8</span>),(<span class="n">8</span>,<span class="n">4</span>),(<span class="n">3</span>,<span class="n">7</span>)) { line(pts.at(e.at(<span class="n">0</span>)),pts.at(e.at(<span class="n">1</span>)),stroke:(paint:rgb(<span class="s">&quot;#8fa9bc&quot;</span>),thickness:<span class="n">2</span>pt)) }
+  for e in ((<span class="n">0</span>,<span class="n">1</span>),(<span class="n">3</span>,<span class="n">4</span>),(<span class="n">6</span>,<span class="n">7</span>)) { let a=pts.at(e.at(<span class="n">0</span>)); let b=pts.at(e.at(<span class="n">1</span>)); line((a.at(<span class="n">0</span>)+.<span class="n">14</span>,a.at(<span class="n">1</span>)),(b.at(<span class="n">0</span>)+.<span class="n">14</span>,b.at(<span class="n">1</span>)),stroke:(paint:rgb(<span class="s">&quot;#ffd166&quot;</span>),thickness:.<span class="n">8</span>pt)) }
+  let labels=([N],[C],[N],[C],[N],[C],[O],[C],[O]); let colors=(<span class="s">&quot;#7b9cff&quot;</span>,<span class="s">&quot;#dcebf5&quot;</span>,<span class="s">&quot;#7b9cff&quot;</span>,<span class="s">&quot;#dcebf5&quot;</span>,<span class="s">&quot;#7b9cff&quot;</span>,<span class="s">&quot;#dcebf5&quot;</span>,<span class="s">&quot;#ff6f91&quot;</span>,<span class="s">&quot;#dcebf5&quot;</span>,<span class="s">&quot;#ff6f91&quot;</span>)
+  for i in range(<span class="n">0</span>,<span class="n">9</span>) { circle(pts.at(i),radius:.<span class="n">34</span>,fill:rgb(<span class="s">&quot;#172a43&quot;</span>),stroke:(paint:rgb(colors.at(i)),thickness:<span class="n">1.5</span>pt)); content(pts.at(i),anchor:<span class="s">&quot;center&quot;</span>,text(size:<span class="n">9</span>pt,weight:<span class="s">&quot;bold&quot;</span>,fill:rgb(colors.at(i)))[<span class="c">#labels.at(i)]) }</span>
+  content((<span class="n">11.4</span>,<span class="n">5.2</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[C₈H₁₀N₄O₂]); content((<span class="n">11.4</span>,<span class="n">4.5</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#54d6c6&quot;</span>))[molar mass <span class="n">194.19</span>])
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/neural_architecture-transparent.png" alt="Neural architecture" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">06 · network diagram</div>
+          <h2>Neural architecture</h2>
+          <p class="blurb">How do residual blocks transform feature dimensions?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">neural-network</span><span class="tag">layers</span><span class="tag">advanced</span></div>
+          <details><summary>src/neural_architecture.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width: auto, height: auto, margin: 24pt, fill: none)</span>
+<span class="c">#set text(font: &quot;Avenir Next&quot;, fill: rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length: 1.2cm, { import cetz.draw: *</span>
+  content((<span class="n">0</span>,<span class="n">7.2</span>), text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[RESIDUAL VISION ENCODER])
+  content((<span class="n">0</span>,<span class="n">6.7</span>), text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[FEATURE SHAPES · SKIP CONNECTIONS · ATTENTION BOTTLENECK])
+  let xs=(<span class="n">0.3</span>,<span class="n">2.5</span>,<span class="n">4.7</span>,<span class="n">6.9</span>,<span class="n">9.1</span>,<span class="n">11.3</span>)
+  let names=([INPUT],[STEM],[RES ×<span class="n">4</span>],[ATTN],[POOL],[EMBED])
+  let dims=([<span class="n">224²</span>×<span class="n">3</span>],[<span class="n">112²</span>×<span class="n">64</span>],[<span class="n">28²</span>×<span class="n">256</span>],[<span class="n">14²</span>×<span class="n">512</span>],[<span class="n">1</span>×<span class="n">512</span>],[<span class="n">1</span>×<span class="n">768</span>])
+  for i in range(<span class="n">0</span>,<span class="n">6</span>) {
+    let h=<span class="n">1.2</span>+calc.rem(i,<span class="n">3</span>)*<span class="n">0.35</span>
+    rect((xs.at(i),<span class="n">2.2</span>),(xs.at(i)+<span class="n">1.55</span>,<span class="n">2.2</span>+h),radius:.<span class="n">12</span>,fill:rgb((<span class="s">&quot;#173f3e&quot;</span>,<span class="s">&quot;#29345c&quot;</span>,<span class="s">&quot;#48263b&quot;</span>,<span class="s">&quot;#4b3e1b&quot;</span>,<span class="s">&quot;#34264c&quot;</span>,<span class="s">&quot;#173f3e&quot;</span>).at(i)),stroke:(paint:rgb((<span class="s">&quot;#54d6c6&quot;</span>,<span class="s">&quot;#7b9cff&quot;</span>,<span class="s">&quot;#ff6f91&quot;</span>,<span class="s">&quot;#ffd166&quot;</span>,<span class="s">&quot;#b889ff&quot;</span>,<span class="s">&quot;#54d6c6&quot;</span>).at(i)),thickness:<span class="n">1.3</span>pt))
+    content((xs.at(i)+.<span class="n">77</span>,<span class="n">2.72</span>),anchor:<span class="s">&quot;center&quot;</span>,text(size:<span class="n">8</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[<span class="c">#names.at(i)])</span>
+    content((xs.at(i)+.<span class="n">77</span>,<span class="n">1.75</span>),anchor:<span class="s">&quot;center&quot;</span>,text(size:<span class="n">7</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[<span class="c">#dims.at(i)])</span>
+    if i &lt; <span class="n">5</span> { line((xs.at(i)+<span class="n">1.58</span>,<span class="n">2.85</span>),(xs.at(i+<span class="n">1</span>)-.<span class="n">08</span>,<span class="n">2.85</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">1.2</span>pt)) }
+  }
+  line((<span class="n">4.9</span>,<span class="n">4.35</span>),(<span class="n">4.9</span>,<span class="n">5.2</span>),(<span class="n">8.15</span>,<span class="n">5.2</span>),(<span class="n">8.15</span>,<span class="n">4.0</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),dash:<span class="s">&quot;dashed&quot;</span>,thickness:<span class="n">1.2</span>pt))
+  content((<span class="n">5.75</span>,<span class="n">5.48</span>),text(size:<span class="n">7</span>pt,fill:rgb(<span class="s">&quot;#ff8ba5&quot;</span>))[residual highway])
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/orbital_mechanics-transparent.png" alt="Orbital mechanics" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">07 · scientific schematic</div>
+          <h2>Orbital mechanics</h2>
+          <p class="blurb">How do transfer orbits connect two circular regimes?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">orbit</span><span class="tag">physics</span><span class="tag">advanced</span></div>
+          <details><summary>src/orbital_mechanics.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.22cm,{ import cetz.draw: *</span>
+  content((-<span class="n">6</span>,<span class="n">6.8</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[HOHMANN TRANSFER GEOMETRY])
+  content((-<span class="n">6</span>,<span class="n">6.3</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[TWO IMPULSES · ENERGY CHANGE · RENDEZVOUS PHASE])
+  for r in (<span class="n">1.8</span>,<span class="n">3.9</span>,<span class="n">5.3</span>) { circle((<span class="n">0</span>,<span class="n">0</span>),radius:r,stroke:(paint:rgb(<span class="s">&quot;#5e7890&quot;</span>).transparentize(<span class="n">35</span>%),thickness:<span class="n">1</span>pt)) }
+  circle((<span class="n">0</span>,<span class="n">0</span>),radius:.<span class="n">55</span>,fill:rgb(<span class="s">&quot;#ffd166&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#fff0bd&quot;</span>),thickness:<span class="n">1</span>pt))
+  circle((<span class="n">1.8</span>,<span class="n">0</span>),radius:.<span class="n">13</span>,fill:rgb(<span class="s">&quot;#54d6c6&quot;</span>),stroke:none)
+  circle((-<span class="n">3.9</span>,<span class="n">0</span>),radius:.<span class="n">16</span>,fill:rgb(<span class="s">&quot;#7b9cff&quot;</span>),stroke:none)
+  circle((-<span class="n">1.05</span>,<span class="n">0</span>),radius:<span class="n">2.85</span>,stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),thickness:<span class="n">2</span>pt))
+  line((<span class="n">1.8</span>,<span class="n">0</span>),(<span class="n">2.55</span>,.<span class="n">55</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#54d6c6&quot;</span>),thickness:<span class="n">2</span>pt))
+  line((-<span class="n">3.9</span>,<span class="n">0</span>),(-<span class="n">3.9</span>,<span class="n">1.0</span>),mark:(end:<span class="s">&quot;&gt;&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">2</span>pt))
+  line((<span class="n">0</span>,-<span class="n">5.6</span>),(<span class="n">0</span>,<span class="n">5.6</span>),stroke:(paint:rgb(<span class="s">&quot;#5e789044&quot;</span>),dash:<span class="s">&quot;dashed&quot;</span>,thickness:.<span class="n">7</span>pt))
+  content((<span class="n">2.7</span>,.<span class="n">55</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#54d6c6&quot;</span>))[Δv₁ injection])
+  content((-<span class="n">5.8</span>,.<span class="n">85</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#7b9cff&quot;</span>))[Δv₂ circularize])
+  content((<span class="n">4.2</span>,-<span class="n">3.9</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[r₂ / r₁ = <span class="n">2.17</span>])
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/phase_field-transparent.png" alt="Phase field" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">08 · phase portrait</div>
+          <h2>Phase field</h2>
+          <p class="blurb">How does a vector field converge on a limit cycle?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">vector-field</span><span class="tag">math</span><span class="tag">advanced</span></div>
+          <details><summary>src/phase_field.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width: auto, height: auto, margin: 24pt, fill: none)</span>
+<span class="c">#set text(font: &quot;Avenir Next&quot;, fill: rgb(&quot;#dcebf5&quot;))</span>
+
+<span class="c">#cetz.canvas(length: 1.25cm, {</span>
+  import cetz.draw: *
+  content((<span class="n">0</span>, <span class="n">7.5</span>), text(size: <span class="n">22</span>pt, weight: <span class="s">&quot;bold&quot;</span>)[PHASE FIELD / LIMIT CYCLE])
+  content((<span class="n">0</span>, <span class="n">6.98</span>), text(size: <span class="n">9</span>pt, fill: rgb(<span class="s">&quot;#7f9db2&quot;</span>))[A DYNAMICAL SYSTEM PORTRAIT])
+  for i in range(-<span class="n">6</span>, <span class="n">7</span>) {
+    line((i, -<span class="n">3.7</span>), (i, <span class="n">5.8</span>), stroke: (paint: rgb(<span class="s">&quot;#5e789033&quot;</span>), thickness: <span class="n">0.45</span>pt))
+  }
+  for j in range(-<span class="n">4</span>, <span class="n">7</span>) {
+    line((-<span class="n">6.4</span>, j), (<span class="n">6.4</span>, j), stroke: (paint: rgb(<span class="s">&quot;#5e789033&quot;</span>), thickness: <span class="n">0.45</span>pt))
+  }
+  line((-<span class="n">6.4</span>, <span class="n">0</span>), (<span class="n">6.5</span>, <span class="n">0</span>), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#a8bdcc&quot;</span>), thickness: <span class="n">1</span>pt))
+  line((<span class="n">0</span>, -<span class="n">3.8</span>), (<span class="n">0</span>, <span class="n">5.9</span>), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#a8bdcc&quot;</span>), thickness: <span class="n">1</span>pt))
+  for ring in range(<span class="n">1</span>, <span class="n">7</span>) {
+    let rr = <span class="n">0.55</span> + ring * <span class="n">0.45</span>
+    circle((<span class="n">0</span>, <span class="n">1.0</span>), radius: rr, stroke: (paint: rgb(<span class="s">&quot;#54d6c6&quot;</span>).transparentize(<span class="n">48</span>%), thickness: <span class="n">0.7</span>pt + ring * <span class="n">0.08</span>pt))
+  }
+  circle((<span class="n">0</span>, <span class="n">1.0</span>), radius: <span class="n">2.75</span>, stroke: (paint: rgb(<span class="s">&quot;#ffd166&quot;</span>), thickness: <span class="n">2</span>pt))
+  for k in range(<span class="n">0</span>, <span class="n">28</span>) {
+    let angle = k * <span class="n">360</span>deg / <span class="n">28</span>
+    let rr = <span class="n">3.25</span> + calc.sin(angle * <span class="n">3</span>) * <span class="n">0.6</span>
+    let x = calc.cos(angle) * rr
+    let y = <span class="n">1.0</span> + calc.sin(angle) * rr
+    let tx = calc.cos(angle + <span class="n">16</span>deg) * (rr - <span class="n">0.28</span>)
+    let ty = <span class="n">1.0</span> + calc.sin(angle + <span class="n">16</span>deg) * (rr - <span class="n">0.28</span>)
+    line((x, y), (tx, ty), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#7b9cff&quot;</span>).transparentize(<span class="n">45</span>%), thickness: <span class="n">0.8</span>pt))
+  }
+  circle((<span class="n">0</span>, <span class="n">1.0</span>), radius: <span class="n">0.12</span>, fill: rgb(<span class="s">&quot;#ff6f91&quot;</span>), stroke: none)
+  content((<span class="n">3.7</span>, <span class="n">4.9</span>), text(size: <span class="n">9</span>pt, fill: rgb(<span class="s">&quot;#ffd166&quot;</span>))[stable limit cycle])
+  line((<span class="n">3.5</span>, <span class="n">4.55</span>), (<span class="n">2.1</span>, <span class="n">3.2</span>), stroke: (paint: rgb(<span class="s">&quot;#ffd166&quot;</span>), thickness: <span class="n">0.8</span>pt))
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/system_map-transparent.png" alt="System map" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">09 · system diagram</div>
+          <h2>System map</h2>
+          <p class="blurb">How does intent become visual output?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">architecture</span><span class="tag">pipeline</span><span class="tag">advanced</span></div>
+          <details><summary>src/system_map.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width: auto, height: auto, margin: 24pt, fill: none)</span>
+<span class="c">#set text(font: &quot;Avenir Next&quot;, fill: rgb(&quot;#dcebf5&quot;))</span>
+
+<span class="c">#cetz.canvas(length: 1.25cm, {</span>
+  import cetz.draw: *
+  content((<span class="n">0</span>, <span class="n">7.2</span>), text(size: <span class="n">22</span>pt, weight: <span class="s">&quot;bold&quot;</span>)[SEMANTIC VISUAL COMPILER])
+  content((<span class="n">0</span>, <span class="n">6.68</span>), text(size: <span class="n">9</span>pt, fill: rgb(<span class="s">&quot;#7f9db2&quot;</span>))[INTENT → INTERMEDIATE REPRESENTATION → RENDERERS])
+  line((<span class="n">0</span>, <span class="n">6.38</span>), (<span class="n">5.1</span>, <span class="n">6.38</span>), stroke: (paint: rgb(<span class="s">&quot;#52758c&quot;</span>), thickness: <span class="n">0.8</span>pt))
+  let nodes = (
+    ((<span class="n">0.2</span>, <span class="n">3.2</span>), (<span class="n">2.6</span>, <span class="n">1.1</span>), [Intent], rgb(<span class="s">&quot;#173f3e&quot;</span>), rgb(<span class="s">&quot;#54d6c6&quot;</span>)),
+    ((<span class="n">4.2</span>, <span class="n">3.2</span>), (<span class="n">3.3</span>, <span class="n">1.1</span>), [Visualization IR], rgb(<span class="s">&quot;#29345c&quot;</span>), rgb(<span class="s">&quot;#7b9cff&quot;</span>)),
+    ((<span class="n">9.2</span>, <span class="n">5.0</span>), (<span class="n">2.5</span>, <span class="n">1.0</span>), [SVG / D3], rgb(<span class="s">&quot;#48263b&quot;</span>), rgb(<span class="s">&quot;#ff6f91&quot;</span>)),
+    ((<span class="n">9.2</span>, <span class="n">3.2</span>), (<span class="n">2.5</span>, <span class="n">1.0</span>), [PNG / PDF], rgb(<span class="s">&quot;#4b3e1b&quot;</span>), rgb(<span class="s">&quot;#ffd166&quot;</span>)),
+    ((<span class="n">9.2</span>, <span class="n">1.4</span>), (<span class="n">2.5</span>, <span class="n">1.0</span>), [WebGL / Video], rgb(<span class="s">&quot;#34264c&quot;</span>), rgb(<span class="s">&quot;#b889ff&quot;</span>)),
+  )
+  for n in nodes {
+    rect(n.at(<span class="n">0</span>), (n.at(<span class="n">0</span>).at(<span class="n">0</span>) + n.at(<span class="n">1</span>).at(<span class="n">0</span>), n.at(<span class="n">0</span>).at(<span class="n">1</span>) + n.at(<span class="n">1</span>).at(<span class="n">1</span>)), radius: <span class="n">0.16</span>, fill: n.at(<span class="n">3</span>), stroke: (paint: n.at(<span class="n">4</span>), thickness: <span class="n">1.3</span>pt))
+    content((n.at(<span class="n">0</span>).at(<span class="n">0</span>) + n.at(<span class="n">1</span>).at(<span class="n">0</span>)/<span class="n">2</span>, n.at(<span class="n">0</span>).at(<span class="n">1</span>) + n.at(<span class="n">1</span>).at(<span class="n">1</span>)/<span class="n">2</span>), anchor: <span class="s">&quot;center&quot;</span>, text(size: <span class="n">10</span>pt, weight: <span class="s">&quot;semibold&quot;</span>)[<span class="c">#n.at(2)])</span>
+  }
+  line((<span class="n">2.8</span>, <span class="n">3.75</span>), (<span class="n">4.0</span>, <span class="n">3.75</span>), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#54d6c6&quot;</span>), thickness: <span class="n">1.8</span>pt))
+  line((<span class="n">7.5</span>, <span class="n">3.75</span>), (<span class="n">8.4</span>, <span class="n">3.75</span>), (<span class="n">8.4</span>, <span class="n">5.5</span>), (<span class="n">9.0</span>, <span class="n">5.5</span>), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#ff6f91&quot;</span>), thickness: <span class="n">1.4</span>pt))
+  line((<span class="n">7.5</span>, <span class="n">3.75</span>), (<span class="n">9.0</span>, <span class="n">3.75</span>), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#ffd166&quot;</span>), thickness: <span class="n">1.4</span>pt))
+  line((<span class="n">7.5</span>, <span class="n">3.75</span>), (<span class="n">8.4</span>, <span class="n">3.75</span>), (<span class="n">8.4</span>, <span class="n">1.9</span>), (<span class="n">9.0</span>, <span class="n">1.9</span>), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#b889ff&quot;</span>), thickness: <span class="n">1.4</span>pt))
+  content((<span class="n">4.3</span>, <span class="n">1.55</span>), text(size: <span class="n">8</span>pt, fill: rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[MARKS  •  SCALES  •  LAYOUT  •  STYLE])
+  for i in range(<span class="n">0</span>, <span class="n">12</span>) {
+    circle((<span class="n">4.45</span> + i * <span class="n">0.24</span>, <span class="n">1.05</span>), radius: <span class="n">0.045</span> + calc.rem(i, <span class="n">3</span>) * <span class="n">0.02</span>, fill: rgb(<span class="s">&quot;#7b9cff&quot;</span>).transparentize(<span class="n">28</span>%), stroke: none)
+  }
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/timeline_roadmap-transparent.png" alt="Timeline roadmap" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">10 · roadmap</div>
+          <h2>Timeline roadmap</h2>
+          <p class="blurb">How do workstreams, gates, and dependencies align?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">timeline</span><span class="tag">planning</span><span class="tag">advanced</span></div>
+          <details><summary>src/timeline_roadmap.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.1cm,{ import cetz.draw: *</span>
+  content((<span class="n">0</span>,<span class="n">8.5</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[LUNAR INSTRUMENT ROADMAP])
+  content((<span class="n">0</span>,<span class="n">8.0</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[WORKSTREAMS · DEPENDENCIES · DECISION GATES · SLACK])
+  for m in range(<span class="n">0</span>,<span class="n">19</span>) { line((<span class="n">2</span>+m*.<span class="n">65</span>,<span class="n">1.0</span>),(<span class="n">2</span>+m*.<span class="n">65</span>,<span class="n">7.25</span>),stroke:(paint:rgb(<span class="s">&quot;#5e789033&quot;</span>),thickness:.<span class="n">5</span>pt)); if calc.rem(m,<span class="n">3</span>) == <span class="n">0</span> { content((<span class="n">2</span>+m*.<span class="n">65</span>,.<span class="n">55</span>),anchor:<span class="s">&quot;center&quot;</span>,text(size:<span class="n">7</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[M<span class="c">#(m)]) } }</span>
+  let rows=([SCIENCE],[OPTICS],[THERMAL],[FLIGHT SW],[GROUND],[REVIEW])
+  let starts=(<span class="n">0</span>,<span class="n">2</span>,<span class="n">4</span>,<span class="n">6</span>,<span class="n">3</span>,<span class="n">13</span>); let lens=(<span class="n">6</span>,<span class="n">7</span>,<span class="n">5</span>,<span class="n">8</span>,<span class="n">9</span>,<span class="n">4</span>)
+  for i in range(<span class="n">0</span>,<span class="n">6</span>) {
+    let y = <span class="n">6.65</span> - i * .<span class="n">95</span>
+    let x0 = <span class="n">2</span> + starts.at(i) * .<span class="n">65</span>
+    let x1 = <span class="n">2</span> + (starts.at(i) + lens.at(i)) * .<span class="n">65</span>
+    content((<span class="n">0</span>,y+.<span class="n">22</span>),text(size:<span class="n">8</span>pt)[<span class="c">#rows.at(i)])</span>
+    rect((x0,y),(x1,y+.<span class="n">52</span>),radius:.<span class="n">1</span>,fill:rgb((<span class="s">&quot;#173f3e&quot;</span>,<span class="s">&quot;#29345c&quot;</span>,<span class="s">&quot;#48263b&quot;</span>,<span class="s">&quot;#4b3e1b&quot;</span>,<span class="s">&quot;#34264c&quot;</span>,<span class="s">&quot;#173f3e&quot;</span>).at(i)),stroke:(paint:rgb((<span class="s">&quot;#54d6c6&quot;</span>,<span class="s">&quot;#7b9cff&quot;</span>,<span class="s">&quot;#ff6f91&quot;</span>,<span class="s">&quot;#ffd166&quot;</span>,<span class="s">&quot;#b889ff&quot;</span>,<span class="s">&quot;#54d6c6&quot;</span>).at(i)),thickness:<span class="n">1</span>pt))
+    if i &lt; <span class="n">5</span> {
+      let nextx = <span class="n">2</span> + starts.at(i + <span class="n">1</span>) * .<span class="n">65</span>
+      line((x1, y + .<span class="n">25</span>), (nextx, y - .<span class="n">7</span>), mark: (end: <span class="s">&quot;&gt;&quot;</span>), stroke: (paint: rgb(<span class="s">&quot;#8fa9bc&quot;</span>), thickness: .<span class="n">8</span>pt))
+    }
+  }
+  for gate in (<span class="n">6</span>,<span class="n">12</span>,<span class="n">18</span>) { line((<span class="n">2</span>+gate*.<span class="n">65</span>,.<span class="n">9</span>),(<span class="n">2</span>+gate*.<span class="n">65</span>,<span class="n">7.3</span>),stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),dash:<span class="s">&quot;dashed&quot;</span>,thickness:<span class="n">1.1</span>pt)) }
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/topographic_map-transparent.png" alt="Topographic map" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">11 · contour map</div>
+          <h2>Topographic map</h2>
+          <p class="blurb">Where do contour density and drainage reveal terrain?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">topography</span><span class="tag">map</span><span class="tag">advanced</span></div>
+          <details><summary>src/topographic_map.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.18cm,{ import cetz.draw: *</span>
+  content((-<span class="n">6</span>,<span class="n">7</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[ALPINE CATCHMENT TOPOGRAPHY])
+  content((-<span class="n">6</span>,<span class="n">6.5</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[<span class="n">20</span> M CONTOURS · RIDGELINES · DRAINAGE · SURVEY CONTROL])
+  for ring in range(<span class="n">1</span>,<span class="n">13</span>) { let rx=.<span class="n">55</span>+ring*.<span class="n">42</span>; let ry=.<span class="n">35</span>+ring*.<span class="n">29</span>; circle((<span class="n">0</span>,<span class="n">0</span>),radius:(rx,ry),stroke:(paint:rgb(<span class="s">&quot;#54d6c6&quot;</span>).transparentize(<span class="n">18</span>% + ring * <span class="n">4</span>%),thickness:.<span class="n">55</span>pt+ring*.<span class="n">05</span>pt)) }
+  for ring in range(<span class="n">1</span>,<span class="n">8</span>) { circle((-<span class="n">2.5</span>,<span class="n">1.5</span>),radius:(.<span class="n">4</span>+ring*.<span class="n">31</span>,.<span class="n">25</span>+ring*.<span class="n">23</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>).transparentize(<span class="n">35</span>%),thickness:.<span class="n">7</span>pt)) }
+  line((-<span class="n">5</span>,<span class="n">3.8</span>),(-<span class="n">3.5</span>,<span class="n">2.7</span>),(-<span class="n">2.4</span>,<span class="n">1.0</span>),(-.<span class="n">9</span>,.<span class="n">4</span>),(.<span class="n">2</span>,-.<span class="n">7</span>),(<span class="n">2.1</span>,-<span class="n">1.8</span>),(<span class="n">4.8</span>,-<span class="n">3.2</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">1.8</span>pt))
+  line((-<span class="n">1.2</span>,<span class="n">4.0</span>),(-.<span class="n">5</span>,<span class="n">2.1</span>),(.<span class="n">2</span>,.<span class="n">8</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">1</span>pt)); line((<span class="n">3.8</span>,<span class="n">2.8</span>),(<span class="n">2.3</span>,<span class="n">1.4</span>),(.<span class="n">4</span>,-.<span class="n">5</span>),stroke:(paint:rgb(<span class="s">&quot;#7b9cff&quot;</span>),thickness:<span class="n">1</span>pt))
+  for p in ((-<span class="n">4</span>,<span class="n">2.8</span>),(<span class="n">0</span>,<span class="n">0</span>),(<span class="n">3.2</span>,<span class="n">1.8</span>),(-<span class="n">1.5</span>,-<span class="n">2.4</span>)) { circle(p,radius:.<span class="n">1</span>,fill:rgb(<span class="s">&quot;#ff6f91&quot;</span>),stroke:none); line((p.at(<span class="n">0</span>) - .<span class="n">25</span>,p.at(<span class="n">1</span>)),(p.at(<span class="n">0</span>) + .<span class="n">25</span>,p.at(<span class="n">1</span>)),stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),thickness:.<span class="n">7</span>pt)); line((p.at(<span class="n">0</span>),p.at(<span class="n">1</span>) - .<span class="n">25</span>),(p.at(<span class="n">0</span>),p.at(<span class="n">1</span>) + .<span class="n">25</span>),stroke:(paint:rgb(<span class="s">&quot;#ff6f91&quot;</span>),thickness:.<span class="n">7</span>pt)) }
+  content((<span class="n">3.7</span>,<span class="n">4.5</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#ffd166&quot;</span>))[summit <span class="n">2</span>,<span class="n">418</span> m]); line((<span class="n">3.5</span>,<span class="n">4.2</span>),(<span class="n">2.1</span>,<span class="n">2.4</span>),stroke:(paint:rgb(<span class="s">&quot;#ffd166&quot;</span>),thickness:.<span class="n">8</span>pt))
+})
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot dark"><img src="out/type_scale-transparent.png" alt="Type scale" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">12 · specimen</div>
+          <h2>Type scale</h2>
+          <p class="blurb">How do typography tokens form a coherent hierarchy?</p>
+          <div class="tags"><span class="tag">cetz</span><span class="tag">typography</span><span class="tag">design-system</span><span class="tag">advanced</span></div>
+          <details><summary>src/type_scale.typ</summary><pre><code><span class="c">#import &quot;@preview/cetz:0.5.2&quot;</span>
+<span class="c">#set page(width:auto,height:auto,margin:24pt,fill:none)</span>
+<span class="c">#set text(font:&quot;Avenir Next&quot;,fill:rgb(&quot;#dcebf5&quot;))</span>
+<span class="c">#cetz.canvas(length:1.05cm,{ import cetz.draw: *</span>
+  content((<span class="n">0</span>,<span class="n">9</span>),text(size:<span class="n">22</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[EDITORIAL TYPE SYSTEM])
+  content((<span class="n">0</span>,<span class="n">8.5</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7f9db2&quot;</span>))[A MODULAR SCALE WITH ROLES, MEASURES, AND BASELINE RHYTHM])
+  for y in range(<span class="n">0</span>,<span class="n">17</span>) { line((<span class="n">0</span>,.<span class="n">7</span>+y*.<span class="n">42</span>),(<span class="n">14</span>,.<span class="n">7</span>+y*.<span class="n">42</span>),stroke:(paint:rgb(<span class="s">&quot;#5e789022&quot;</span>),thickness:.<span class="n">45</span>pt)) }
+  content((<span class="n">0</span>,<span class="n">6.9</span>),text(size:<span class="n">32</span>pt,weight:<span class="s">&quot;bold&quot;</span>)[The shape of evidence])
+  content((<span class="n">0</span>,<span class="n">5.85</span>),text(size:<span class="n">18</span>pt,weight:<span class="s">&quot;semibold&quot;</span>,fill:rgb(<span class="s">&quot;#54d6c6&quot;</span>))[Display / <span class="n">42</span> · <span class="n">48</span>])
+  content((<span class="n">0</span>,<span class="n">4.85</span>),text(size:<span class="n">14</span>pt,weight:<span class="s">&quot;semibold&quot;</span>)[A field guide to visual reasoning])
+  content((<span class="n">0</span>,<span class="n">4.2</span>),text(size:<span class="n">9</span>pt,fill:rgb(<span class="s">&quot;#7b9cff&quot;</span>))[HEADING <span class="n">02</span> / <span class="n">18</span> · <span class="n">24</span> / +<span class="n">1</span>%])
+  content((<span class="n">0</span>,<span class="n">3.25</span>),text(size:<span class="n">10</span>pt)[A clear hierarchy lets readers scan the claim, inspect the evidence,])
+  content((<span class="n">0</span>,<span class="n">2.75</span>),text(size:<span class="n">10</span>pt)[and recover the method without losing the thread of the argument.])
+  content((<span class="n">0</span>,<span class="n">2.05</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#8ba6b9&quot;</span>))[BODY / <span class="n">13</span> · <span class="n">19</span> / <span class="n">68</span> CH  ·  MUTED / <span class="n">11</span> · <span class="n">16</span>])
+  let sizes=(<span class="n">8</span>,<span class="n">10</span>,<span class="n">12</span>,<span class="n">14</span>,<span class="n">18</span>,<span class="n">24</span>,<span class="n">32</span>); for i in range(<span class="n">0</span>,<span class="n">7</span>) { circle((<span class="n">8.3</span>+i*.<span class="n">78</span>,<span class="n">6.2</span>),radius:sizes.at(i)/<span class="n">80</span>,fill:rgb((<span class="s">&quot;#54d6c6&quot;</span>,<span class="s">&quot;#7b9cff&quot;</span>,<span class="s">&quot;#b889ff&quot;</span>,<span class="s">&quot;#ff6f91&quot;</span>,<span class="s">&quot;#ffd166&quot;</span>,<span class="s">&quot;#54d6c6&quot;</span>,<span class="s">&quot;#7b9cff&quot;</span>).at(i)),stroke:none); content((<span class="n">8.15</span>+i*.<span class="n">78</span>,<span class="n">5.3</span>),text(size:<span class="n">6</span>pt)[<span class="c">#sizes.at(i)]) }</span>
+  rect((<span class="n">8.1</span>,<span class="n">1.45</span>),(<span class="n">13.8</span>,<span class="n">3.75</span>),radius:.<span class="n">12</span>,fill:rgb(<span class="s">&quot;#172a43&quot;</span>),stroke:(paint:rgb(<span class="s">&quot;#52758c&quot;</span>),thickness:<span class="n">1</span>pt)); content((<span class="n">8.5</span>,<span class="n">3.25</span>),text(size:<span class="n">8</span>pt,fill:rgb(<span class="s">&quot;#ff6f91&quot;</span>))[TOKEN CONTRACT]); content((<span class="n">8.5</span>,<span class="n">2.7</span>),text(size:<span class="n">7</span>pt)[display-xl  <span class="n">42</span>/<span class="n">48</span>  <span class="n">700</span>]); content((<span class="n">8.5</span>,<span class="n">2.2</span>),text(size:<span class="n">7</span>pt)[body-md     <span class="n">13</span>/<span class="n">19</span>  <span class="n">400</span>]); content((<span class="n">8.5</span>,<span class="n">1.7</span>),text(size:<span class="n">7</span>pt)[label-sm    <span class="n">11</span>/<span class="n">16</span>  <span class="n">600</span>])
+})
+</code></pre></details>
+        </div>
+      </article>
+  </main>
+  <footer>
+    Generated by <code>tools/gallery.py</code> — regenerate with <code>just gallery</code>
+    after <code>just build</code>. Images are referenced from
+    <code>out/</code>, so open this file straight from the checkout.
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "title": "cetz-demos",
+  "library": "CeTZ 0.5 · Typst",
+  "tagline": "Twelve CeTZ studies, each a finished figure rather than a feature probe — constructive geometry, phase portraits, circuit schematics, orbital transfers and typographic specimens, all drawn in Typst and rendered to transparent PNG.",
+  "rebuild": "just build",
+  "sources": "src/*.typ",
+  "artifact_prefix": "{stem}",
+  "backdrop": "dark"
+}
