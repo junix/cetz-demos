@@ -14,7 +14,7 @@ Document-native vector drawing with Typst and CeTZ 0.5.2 across twelve reference
 
 ```bash
 uv sync
-uv run python scripts/render.py
+uv run python tools/render.py
 ```
 
 The renderer invokes the installed Typst compiler and rejects outputs that lack transparent, visible, or chromatic pixels.

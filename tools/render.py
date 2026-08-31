@@ -21,7 +21,7 @@ def main() -> None:
         raise SystemExit("typst is required")
     OUT.mkdir(exist_ok=True)
     for scene in SCENES:
-        source = ROOT / "sources" / f"{scene}.typ"
+        source = ROOT / "src" / f"{scene}.typ"
         output = OUT / f"{scene}-transparent.png"
         subprocess.run([typst, "compile", "--ppi", "190", str(source), str(output)], check=True, cwd=ROOT)
         image = Image.open(output).convert("RGBA")
