@@ -32,6 +32,19 @@ h1{margin:0;font-size:30px;letter-spacing:-.02em;font-weight:650}
 .pill{font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
   background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 11px}
 .pill b{color:var(--ink);font-weight:600}
+.controls{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  padding:12px 0;margin:0 0 26px;background:linear-gradient(var(--bg) 80%,transparent)}
+.controls input{flex:1 1 220px;max-width:400px;border:1px solid var(--line);border-radius:10px;
+  background:var(--panel);color:var(--ink);padding:9px 13px;font-size:14px;font-family:inherit}
+.controls input:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);cursor:pointer;
+  background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 11px}
+.chip span{color:var(--faint);margin-left:3px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.chip[aria-pressed="true"] span{color:var(--bg);opacity:.75}
+#count{margin-left:auto;color:var(--muted);font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+#empty{color:var(--muted);font-size:14px}
 .grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
   overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
@@ -86,8 +99,14 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
     <p class="tagline">Twelve CeTZ studies, each a finished figure rather than a feature probe — constructive geometry, phase portraits, circuit schematics, orbital transfers and typographic specimens, all drawn in Typst and rendered to transparent PNG.</p>
     <div class="meta"><span class="pill">CeTZ 0.5 · Typst</span><span class="pill"><b>12</b> demos</span><span class="pill"><b>12</b> rendered</span></div>
   </header>
+  <section class="controls" aria-label="Gallery filters">
+    <input id="q" type="search" placeholder="Filter by title, blurb, tag, or family…" autocomplete="off" aria-label="Filter demos">
+    
+    <output id="count" aria-live="polite">12 shown</output>
+  </section>
+  <p id="empty" hidden>No demos match the current filter.</p>
   <main class="grid">
-      <article class="card">
+      <article class="card" data-family="geometry anatomy" data-search="bezier anatomy how do control handles determine curve shape? cetz bezier vector advanced 01 · geometry anatomy geometry anatomy">
         <figure class="shot dark"><img src="out/bezier_anatomy-transparent.png" alt="Bezier anatomy" loading="lazy"></figure>
         <div class="body">
           <div class="idx">01 · geometry anatomy</div>
@@ -110,7 +129,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="circuit" data-search="circuit schematic how does a sensor front end condition a signal? cetz circuit engineering advanced 02 · circuit circuit">
         <figure class="shot dark"><img src="out/circuit_schematic-transparent.png" alt="Circuit schematic" loading="lazy"></figure>
         <div class="body">
           <div class="idx">02 · circuit</div>
@@ -136,7 +155,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="geometric proof" data-search="geometric proof how is the nine-point circle constructed? cetz geometry construction advanced 03 · geometric proof geometric proof">
         <figure class="shot dark"><img src="out/geometric_proof-transparent.png" alt="Geometric proof" loading="lazy"></figure>
         <div class="body">
           <div class="idx">03 · geometric proof</div>
@@ -172,7 +191,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="math explainer" data-search="matrix transforms how do basis vectors change under chained transforms? cetz matrix education advanced 04 · math explainer math explainer">
         <figure class="shot dark"><img src="out/matrix_transforms-transparent.png" alt="Matrix transforms" loading="lazy"></figure>
         <div class="body">
           <div class="idx">04 · math explainer</div>
@@ -203,7 +222,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="molecular diagram" data-search="molecule how are functional groups positioned in a molecule? cetz chemistry graph advanced 05 · molecular diagram molecular diagram">
         <figure class="shot dark"><img src="out/molecule-transparent.png" alt="Molecule" loading="lazy"></figure>
         <div class="body">
           <div class="idx">05 · molecular diagram</div>
@@ -226,7 +245,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="network diagram" data-search="neural architecture how do residual blocks transform feature dimensions? cetz neural-network layers advanced 06 · network diagram network diagram">
         <figure class="shot dark"><img src="out/neural_architecture-transparent.png" alt="Neural architecture" loading="lazy"></figure>
         <div class="body">
           <div class="idx">06 · network diagram</div>
@@ -255,7 +274,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="scientific schematic" data-search="orbital mechanics how do transfer orbits connect two circular regimes? cetz orbit physics advanced 07 · scientific schematic scientific schematic">
         <figure class="shot dark"><img src="out/orbital_mechanics-transparent.png" alt="Orbital mechanics" loading="lazy"></figure>
         <div class="body">
           <div class="idx">07 · scientific schematic</div>
@@ -283,7 +302,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="phase portrait" data-search="phase field how does a vector field converge on a limit cycle? cetz vector-field math advanced 08 · phase portrait phase portrait">
         <figure class="shot dark"><img src="out/phase_field-transparent.png" alt="Phase field" loading="lazy"></figure>
         <div class="body">
           <div class="idx">08 · phase portrait</div>
@@ -327,7 +346,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="system diagram" data-search="system map how does intent become visual output? cetz architecture pipeline advanced 09 · system diagram system diagram">
         <figure class="shot dark"><img src="out/system_map-transparent.png" alt="System map" loading="lazy"></figure>
         <div class="body">
           <div class="idx">09 · system diagram</div>
@@ -366,7 +385,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="roadmap" data-search="timeline roadmap how do workstreams, gates, and dependencies align? cetz timeline planning advanced 10 · roadmap roadmap">
         <figure class="shot dark"><img src="out/timeline_roadmap-transparent.png" alt="Timeline roadmap" loading="lazy"></figure>
         <div class="body">
           <div class="idx">10 · roadmap</div>
@@ -398,7 +417,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="contour map" data-search="topographic map where do contour density and drainage reveal terrain? cetz topography map advanced 11 · contour map contour map">
         <figure class="shot dark"><img src="out/topographic_map-transparent.png" alt="Topographic map" loading="lazy"></figure>
         <div class="body">
           <div class="idx">11 · contour map</div>
@@ -421,7 +440,7 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
 </code></pre></details>
         </div>
       </article>
-      <article class="card">
+      <article class="card" data-family="specimen" data-search="type scale how do typography tokens form a coherent hierarchy? cetz typography design-system advanced 12 · specimen specimen">
         <figure class="shot dark"><img src="out/type_scale-transparent.png" alt="Type scale" loading="lazy"></figure>
         <div class="body">
           <div class="idx">12 · specimen</div>
@@ -455,5 +474,38 @@ footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
     <code>out/</code>, so open this file straight from the checkout.
   </footer>
 </div>
+<script>
+(function(){
+  var q=document.getElementById('q'),count=document.getElementById('count'),empty=document.getElementById('empty');
+  var cards=[].slice.call(document.querySelectorAll('.card'));
+  var chips=[].slice.call(document.querySelectorAll('.chip'));
+  var family='';
+  function apply(){
+    var t=q.value.trim().toLowerCase(),n=0;
+    for(var i=0;i<cards.length;i++){
+      var c=cards[i];
+      var ok=(!family||c.getAttribute('data-family')===family)&&
+             (!t||(c.getAttribute('data-search')||'').indexOf(t)>=0);
+      c.style.display=ok?'':'none';
+      if(ok)n++;
+    }
+    count.value=n+' / '+cards.length+' shown';
+    empty.hidden=n>0;
+    for(var j=0;j<chips.length;j++){
+      var ch=chips[j];
+      ch.setAttribute('aria-pressed',String(ch.getAttribute('data-family')===family));
+    }
+  }
+  q.addEventListener('input',apply);
+  chips.forEach(function(ch){
+    ch.addEventListener('click',function(){
+      var f=ch.getAttribute('data-family');
+      family=(f===family)?'':f;
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
 </body>
 </html>

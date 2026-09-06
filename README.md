@@ -2,6 +2,8 @@
 
 Document-native vector drawing with Typst and CeTZ 0.5.2 across twelve reference scenarios. Every source is typography-aware, reproducible, and compiled directly to a transparent PNG.
 
+Browse every demo with its source in **[gallery.html](gallery.html)** — searchable, follows your light/dark theme.
+
 `catalog.json` records the educational/design use, question, visual family, complexity, and tags.
 
 | Geometry proof | Phase field | System map | Neural architecture |
