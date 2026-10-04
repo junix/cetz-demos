@@ -10,6 +10,7 @@ build:
 
 # The render gate is the test gate.
 test: build
+    uv run python -m unittest discover -s tests -v
     @echo "all sources rendered and validated"
 
 # Demos repo — no binary, no launcher (ADR-749: nothing to install).
